@@ -8,8 +8,8 @@
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <div class="site-heading">
-                        <h1>Louis Blog</h1>
-                        <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        <h1>SymfoDoggos</h1>
+                        <span class="subheading">Reddit, mais pour les doggos</span>
                     </div>
                 </div>
             </div>
@@ -18,17 +18,47 @@
 
     <!-- Main Content -->
     <div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="post-preview">
-                <!-- Pager -->
-                <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
-                </div>
+        <div class="row">
+            <div class="col-lg-10 col-md-10 mx-auto">
+                {% for post in posts %}
+                    <div class="d-flex justify-content-between">
+                        <div class="post-preview mr-4">
+                            {#<a href="{{ url('show', {"id": post.getId() } )}}">#}
+                            <a href="">
+                                <h2 class="post-title">
+                                    {{ post.getTitle() }}
+                                </h2>
+                            </a>
+                            <p class="post-meta">Posted by
+                                <a href="#">quelqu'un</a>
+                                on the {{ post.getCreatedAt()|date('d/m/Y') }}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                {% if pagination.nbPages > 0 %}
+                    {% if pagination.page > 1 %}
+                        <div class="clearfix">
+                            <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
+                                pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
+                                Newer posts
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if pagination.page < pagination.nbPages %}
+                        <div class="clearfix">
+                            <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
+                                pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
+                                Older posts
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
-
 
     <hr>
 {% endblock %}
