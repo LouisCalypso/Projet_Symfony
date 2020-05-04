@@ -9,10 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
+     * @Route("/", name="root")
      * @Route("/home/{page}", name="home")
      */
-    public function index($page)
+    public function index(int $page = 1)
     {
+        if ($page < 1 ) $page = 1;
+
         $posts = $this->postRepository->findAllPagine($page, 3); // ici mais on peut mettre autre chose (3 par page là)
         $pagination = array(
             'page' => $page,
