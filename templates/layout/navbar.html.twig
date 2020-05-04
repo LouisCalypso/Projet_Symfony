@@ -1,14 +1,21 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
         <!-- <a class="navbar-brand" href="{{ url('home', {'page':1}) }}">Louis Blog</a> -->
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
+        <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu <i class="fas fa-bars"></i>
         </button>
+        {% if app.user %}
+            Hello {{ app.user.username }}
+        {% endif %}
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('home', {'page':1}) }}">Home</a>
+                    {% if app.user %}
+                        <a class="nav-link" href="{{ url('app_logout') }}">Logout</a>
+                    {% else %}
+                        <a class="nav-link" href="{{ url('app_login') }}">Login</a>
+                    {% endif %}
                 </li>
             </ul>
         </div>
