@@ -1,23 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-    <div class="container">
-        <!-- <a class="navbar-brand" href="{{ url('home', {'page':1}) }}">Louis Blog</a> -->
-        <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu <i class="fas fa-bars"></i>
-        </button>
-        {% if app.user %}
-            Hello {{ app.user.username }}
-        {% endif %}
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url('home', {'page':1}) }}">Home</a>
-                    {% if app.user %}
-                        <a class="nav-link" href="{{ url('app_logout') }}">Logout</a>
-                    {% else %}
-                        <a class="nav-link" href="{{ url('app_login') }}">Login</a>
-                    {% endif %}
-                </li>
-            </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="mainNav">
+    <span class="navbar-brand mb-0 h1">DOGGOS !</span>
+    {% if app.user %}
+        <div class="navbar-text"> Hello {{ app.user.username }} </div>
+    {% endif %}
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbarResponsive">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link {{ app.request.attributes.get('_route') == 'root' ? 'active' : '' }}"
+                href="{{ url('root') }}">Home</a>
+            {% if app.user %}
+                <a class="nav-item nav-link {{ app.request.attributes.get('_route') == 'app_logout' ? 'active' : '' }}"
+                    href="{{ url('app_logout') }}">Logout</a>
+            {% else %}
+                <a class="nav-item nav-link {{ app.request.attributes.get('_route') == 'app_login' ? 'active' : '' }}"
+                    href="{{ url('app_login') }}">Login</a>
+            {% endif %}
         </div>
+        <form class="form-inline ml-auto" method='post'>
+            <input class="form-control mr-sm-2" type="search" placeholder="Wich dog ?" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
 </nav>
+<div class="mb-5"></div>
