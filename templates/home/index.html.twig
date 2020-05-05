@@ -2,7 +2,8 @@
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3" style="background-image: url('img/home-bg.jpg')">
+    <!--<header class="masthead p-5 my-3" style="background-image: url('img/home-bg.jpg')">-->
+    <header class="masthead p-5 my-3">
         <div class="overlay"></div>
         <div class="container">
             <div class="site-heading text-center">
@@ -20,11 +21,15 @@
                     <div class="d-flex justify-content-between">
                         <div class="post-preview mr-4">
                             {#<a href="{{ url('show', {"id": post.getId() } )}}">#}
-                            <a href="">
                                 <h2 class="post-title">
-                                    {{ post.getTitle() }}
+                                    <img src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;">
+                                    <span style="color:red;">{{ post.getNbVotes() }}</span>
+                                    <img src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;">
+                                    <a href="">
+                                     {{ post.getTitle() }}
+                                    </a>
                                 </h2>
-                            </a>
+
                             <p class="post-meta">Posted by
                                 <a href="#">quelqu'un</a>
                                 on the {{ post.getCreatedAt()|date('d/m/Y') }}
