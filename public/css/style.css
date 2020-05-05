@@ -1,0 +1,7 @@
+.up-vote, .down-vote {
+    cursor: pointer;
+}
+
+.up-vote-toggled, .down-vote-toggled {
+    cursor: not-allowed;
+}

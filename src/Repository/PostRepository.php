@@ -32,11 +32,17 @@ class PostRepository extends ServiceEntityRepository
             ;
     }
     
-    public function findAllPagine($page, $count) {
-        $qb = $this->createQueryBuilder('post')
-            ->orderBy('post.createdAt', 'DESC');
+    public function findAllPagine($page, $count, $user) {
+        if(is_null($user)) {
+            $qb = $this->createQueryBuilder('post')
+                ->add('orderBy', 'post.nbVotes DESC, post.createdAt DESC');
+        } else {
+            $qb = $this->createQueryBuilder('post')
+                ->add('orderBy', 'post.nbVotes DESC, post.createdAt DESC');
+        }
         
         $query = $qb->getQuery();
+        $query->setHydrationMode(\Doctrine\ORM\Query::HYDRATE_OBJECT);
         
         $premierResultat = ($page - 1) * $count;
         $query->setFirstResult($premierResultat)->setMaxResults($count);
