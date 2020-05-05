@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends AbstractController
 {
@@ -34,5 +36,31 @@ class HomeController extends AbstractController
     public function __construct(PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
+    }
+
+    /**
+     * @Route("/home/voteAction/ajaxAction", name="voteAction")
+     */
+    public function voteAction(Request $request){
+
+        $id = $request->request->get('id');
+        $type = $request->request->get('type');
+        $post = $this->postRepository->findOneById($id);
+        if($type == "up-vote"){
+            $post->incrementNbVotes();
+        }else{
+            $post->decrementNbVotes();
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($post);
+        $manager->flush();
+
+        $response = new Response(json_encode(array(
+            'nbVote' => $post->getNbVotes()
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+
     }
 }

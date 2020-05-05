@@ -22,9 +22,9 @@
                         <div class="post-preview mr-4">
                             {#<a href="{{ url('show', {"id": post.getId() } )}}">#}
                                 <h2 class="post-title">
-                                    <img src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;">
-                                    <span style="color:red;">{{ post.getNbVotes() }}</span>
-                                    <img src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;">
+                                    <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                                    <span class="nb-vote" style="color:red;" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
+                                    <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
                                     <a href="">
                                      {{ post.getTitle() }}
                                     </a>

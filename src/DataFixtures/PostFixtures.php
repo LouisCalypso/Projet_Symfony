@@ -26,7 +26,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             $post->setTitle($faker->text($maxNbChars = 10));
             $post->setBody($faker->paragraph($nbSentences = 3));
             $post->setCreatedAt($faker->dateTime($max = 'now', $timezone = null));
-            $post->setNbVotes($faker->randomDigit);
+            $post->setNbVotes(0);
             $this->addReference(self::POST.$i,$post);
             $user = $this->getReference(UserFixtures::USER.$i);
             $post->setUser($user);
@@ -39,7 +39,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             $post->setTitle($faker->text($maxNbChars = 10));
             $post->setImage($faker->imageUrl($width = 400, $height = 400));
             $post->setCreatedAt($faker->dateTime($max = 'now', $timezone = null));
-            $post->setNbVotes($faker->randomDigit);
+            $post->setNbVotes(0);
             $this->addReference(self::POST.$i,$post);
             $user = $this->getReference(UserFixtures::USER.$i);
             $post->setUser($user);
@@ -50,7 +50,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
         $post->setTitle($faker->text($maxNbChars = 10));
         $post->setLink("www.reddit.com");
         $post->setCreatedAt($faker->dateTime($max = 'now', $timezone = null));
-        $post->setNbVotes($faker->randomDigit);
+        $post->setNbVotes(0);
         $this->addReference(self::POST.$i,$post);
         $user = $this->getReference(UserFixtures::USER.$i);
         $post->setUser($user);
