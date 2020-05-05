@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app.user.username }}{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <header class="masthead p-5 my-3" >
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="site-heading text-center">
+                <h1>userID: {{ id }}</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+    content<br/>
+    </div>
+{% endblock %}
