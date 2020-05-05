@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $(".up-vote , .down-vote").click(function () {
+    $(".up-vote, .down-vote").click(function () {
         var self = $(this);
         var id = self.data("id");
         var type = self.attr('class');
