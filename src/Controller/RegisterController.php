@@ -50,7 +50,7 @@ class RegisterController extends AbstractController
 
             // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
             // à nouveau le formulaire
-            return $this->redirectToRoute('home',['page'=>1]);
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('register/index.html.twig', [
