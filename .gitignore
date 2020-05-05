@@ -16,5 +16,5 @@
 ###< symfony/phpunit-bridge ###
 
 ###> mygrations ###
-/src/Migrations
+/src/Migrations/
 ###< mygrations ###
