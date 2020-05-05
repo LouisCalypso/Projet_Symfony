@@ -2,7 +2,6 @@
 
 {% block body %}
     <!-- Page Header -->
-    <!--<header class="masthead p-5 my-3" style="background-image: url('img/home-bg.jpg')">-->
     <header class="masthead p-5 my-3">
         <div class="overlay"></div>
         <div class="container">
@@ -23,7 +22,6 @@
                     {% for vote in post.votes %}
                         {% if userLoggedIn %}
                             {% if vote.getUser().id == userLoggedIn.id %}
-                                DEJA VOTE !!!!!!!!!
                                 {% if vote.type %}
                                     {% set upvotePossible = 0 %}
                                 {% else %}
