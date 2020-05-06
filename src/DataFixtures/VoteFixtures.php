@@ -18,18 +18,19 @@ class VoteFixtures extends Fixture implements DependentFixtureInterface
         $faker = Faker\Factory::create();
         for ($i = 0; $i < 5; $i++) {
             $post = $this->getReference(PostFixtures::POST.$i);
-            $user = $this->getReference(UserFixtures::USER.$i);
-            for ($j = 0; $j < rand(1, 4); $j++) {
+            for ($j = 0; $j < rand(1,5); $j++) {
+                $user = $this->getReference(UserFixtures::USER.$j);
                 $vote = new Vote();
                 $bool = $faker->boolean;
-                if($bool){
-                    $post->incrementNbVotes();
-                }else{
-                    $post->decrementNbVotes();
-                }
                 $vote->setType($bool);
                 $vote->setUser($user);
                 $vote->setPost($post);
+                if($bool){
+                    $post->incrementNbVotes($vote);
+                }else{
+                    $post->decrementNbVotes($vote);
+                }
+                
                 $post->addVote($vote);
                 $user->addVote($vote);
 
