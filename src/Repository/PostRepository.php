@@ -34,7 +34,7 @@ class PostRepository extends ServiceEntityRepository
     
     public function findAllPagine($page, $count) {
         $qb = $this->createQueryBuilder('post')
-            ->orderBy('post.createdAt', 'DESC');
+                ->add('orderBy', 'post.nbVotes DESC, post.createdAt DESC');
         
         $query = $qb->getQuery();
         

@@ -135,17 +135,17 @@ class Post
         return $this;
     }
 
-    public function incrementNbVotes(): self
+    public function incrementNbVotes(Vote $vote): self
     {
         $this->nbVotes = $this->nbVotes + 1;
-
+        $this->addVote($vote);
         return $this;
     }
 
-    public function decrementNbVotes(): self
+    public function decrementNbVotes(Vote $vote): self
     {
         $this->nbVotes = $this->nbVotes - 1;
-
+        $this->addVote($vote);
         return $this;
     }
 
