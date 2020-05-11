@@ -8,8 +8,8 @@
 
     <div class="navbar-collapse collapse" id="navbarResponsive">
         <div class="navbar-nav">
-            <a class="nav-item nav-link {{ route == 'root' ? 'active' : route == 'home' ? 'active' }}"
-                href="{{ url('root') }}">Home</a>
+            <a class="nav-item nav-link {{ route == 'home' ? 'active' }}"
+                href="{{ url('home') }}">Home</a>
             {% if app.user %}
                 <a class="navbar-text nav-link {{ route == 'profile' ? 'active' }}"
                     href="{{ url('profile') }}"> Profile </a>
