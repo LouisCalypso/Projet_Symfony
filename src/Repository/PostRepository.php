@@ -34,7 +34,7 @@ class PostRepository extends ServiceEntityRepository
     
     public function findAllPagine($page, $count) {
         $qb = $this->createQueryBuilder('post')
-            ->orderBy('post.createdAt', 'DESC');
+                ->add('orderBy', 'post.nbVotes DESC, post.createdAt DESC');
         
         $query = $qb->getQuery();
         
@@ -43,6 +43,16 @@ class PostRepository extends ServiceEntityRepository
         $paginator = new Paginator($query);
         
         return $paginator;
+    }
+
+    public function findOneById($value): ?Post
+    {
+        return $this->createQueryBuilder('post')
+            ->andWhere('post.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
     }
 
     // /**

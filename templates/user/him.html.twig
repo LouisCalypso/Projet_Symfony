@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app.user.username }}{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <header class="masthead p-5 my-3" >
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="site-heading text-center">
+                <h1>{{ user.username }}</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+    {% for post in user.posts %}
+        <div class="card d-flex justify-content-between">
+            <div class="card-header">
+                <h2 class="card-title post-title">
+                    <img src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;">
+                    <span style="color:red;">{{ post.getNbVotes() }}</span>
+                    <img src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;">
+                    <a href="">
+                        {{ post.getTitle() }}
+                    </a>
+                </h2>
+                <p class="post-meta">
+                    Posted on the {{ post.getCreatedAt()|date('d/m/Y') }}
+                </p>
+            </div>
+            <div class="card-body blockquote">
+                {{ post.body }}
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for comment in post.comments %}
+                    <li class="list-group-item">
+                        <div>
+                            <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
+                            - {{ comment.createdAt|date("d/m/Y \\a\\t h:i") }}
+                        </div>
+                        <p> {{ comment.body }} </p>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="#" class="card-footer bg-primary text-white text-center">Add a comment</a>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
