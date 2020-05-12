@@ -3,21 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Comment;
+use Symfony\Component\Security\Core\Security;
 
 class PostController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/posts/{id}", name="post")
      */
     public function show(Post $post, Request $request)
     {
+
+        $user = $this->security->getUser();
+
         //TODO : COMMENT POST
-        $commentForm = $this->createForm(Comment::class);
+        $commentForm = $this->createForm(CommentType::class);
         // le formulaire prend la requête et va récupérer à lintérieur les champs
         // remplis par le formulaire HTML
         $commentForm->handleRequest($request);
@@ -30,7 +43,7 @@ class PostController extends AbstractController
 
             // on associe le commentaire à l'article et on défini la date de création
             $comment
-                ->setPost(post)
+                ->setPost($post)
                 ->setUser($this->getUser())
                 ->setCreatedAt(new \DateTime());
 
@@ -50,8 +63,10 @@ class PostController extends AbstractController
         }
 
         return $this->render('post/show.html.twig', [
-            'controller_name' => 'PostController',
-            'post' => $post
+            //'controller_name' => 'PostController',
+            'post' => $post,
+            'commentForm' => $commentForm->createView(),
+            'userLoggedIn' => $user
 
         ]);
     }

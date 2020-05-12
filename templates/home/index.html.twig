@@ -47,7 +47,7 @@
                                             <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
                                         {% endif %}
                                     {% endif %}
-                                    <a href="">
+                                    <a href="{{ url('post', {"id": post.getId() } )}}">
                                      {{ post.getTitle() }}
                                     </a>
                                 </h2>
