@@ -12,13 +12,24 @@ use Symfony\Component\Security\Core\Security;
 
 class HomeController extends AbstractController
 {
+    
+    private $postRepository;
+    private $security;
+    
+    public function __construct(PostRepository $postRepository, Security $security)
+    {
+        $this->postRepository = $postRepository;
+        $this->security = $security;
+    }
+    
     /**
      * @Route("/", name="root")
-     * @Route("/home/{page}", name="home")
+     * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
-    public function index(int $page = 1)
+    public function index(int $page)
     {
         if ($page < 1 ) $page = 1;
+        
         $user = $this->security->getUser();
         $posts = $this->postRepository->findAllPagine($page, 3, $user); // ici mais on peut mettre autre chose (3 par page là)
         $pagination = array(
@@ -33,15 +44,6 @@ class HomeController extends AbstractController
             'pagination' => $pagination,
             'userLoggedIn' => $user
         ]);
-    }
-    
-    private $postRepository;
-    private $security;
-    
-    public function __construct(PostRepository $postRepository, Security $security)
-    {
-        $this->postRepository = $postRepository;
-        $this->security = $security;
     }
 
     /**

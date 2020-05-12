@@ -55,6 +55,26 @@ class PostRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * @return Post[] Returns an array of Post objects
+     */
+    public function findAllTitle($value, $page, $count)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->andWhere('p.title LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->orderBy('p.nbVotes', 'DESC')
+            ->addorderBy('p.createdAt', 'DESC')
+            ->getQuery()
+        ;
+        
+        $premierResultat = ($page - 1) * $count;
+        $query->setFirstResult($premierResultat)->setMaxResults($count);
+        $paginator = new Paginator($query);
+        
+        return $paginator;
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

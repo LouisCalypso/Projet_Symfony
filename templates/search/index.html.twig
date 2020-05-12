@@ -6,8 +6,7 @@
         <div class="overlay"></div>
         <div class="container">
             <div class="site-heading text-center">
-                <h1>SymfoDoggos</h1>
-                <span class="subheading">Reddit, mais pour les doggos</span>
+                <h1>Results for "{{ query }}"</h1>
             </div>
         </div>
     </header>
@@ -33,7 +32,6 @@
                     <div class="d-flex justify-content-between">
                         <div class="post-preview mr-4">
                                 <h2 class="post-title">
-
                                     {% if userLoggedIn %}
                                         {% if upvotePossible %}
                                             <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
@@ -64,7 +62,7 @@
                     {% if pagination.page > 1 %}
                         <div class="clearfix">
                             <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                                pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
+                                pagination.paramsRoute|merge({'page': pagination.page-1, 'q': query})) }}">
                                 Newer posts
                             </a>
                         </div>
@@ -73,7 +71,7 @@
                     {% if pagination.page < pagination.nbPages %}
                         <div class="clearfix">
                             <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                                pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
+                                pagination.paramsRoute|merge({'page': pagination.page+1, 'q': query})) }}">
                                 Older posts
                             </a>
                         </div>
