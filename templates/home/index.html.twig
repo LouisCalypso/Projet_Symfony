@@ -32,8 +32,8 @@
                     {% endfor %}
                     <div class="d-flex justify-content-between">
                         <div class="post-preview mr-4">
-                            {#<a href="{{ url('show', {"id": post.getId() } )}}">#}
                                 <h2 class="post-title">
+
                                     {% if userLoggedIn %}
                                         {% if upvotePossible %}
                                             <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
