@@ -26,9 +26,9 @@ class VoteFixtures extends Fixture implements DependentFixtureInterface
                 $vote->setUser($user);
                 $vote->setPost($post);
                 if($bool){
-                    $post->incrementNbVotes($vote);
+                    $post->incrementNbVotes();
                 }else{
-                    $post->decrementNbVotes($vote);
+                    $post->decrementNbVotes();
                 }
                 
                 $post->addVote($vote);
