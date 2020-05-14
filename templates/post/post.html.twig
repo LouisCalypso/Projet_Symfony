@@ -1,0 +1,97 @@
+<div class="card mb-4 flex-row align-items-center">
+    {% if post.getImage() %}
+        <img src="{{ post.getImage() }}" class="rounded" alt="Post image" width="200">
+    {% endif %}
+    <div class="card-body {{ post.getImage() ? : "text-center" }}">
+        <h4 style="color:red;">
+        <!-- VOTE SYSTEM -->
+        {% if app.user %}
+            {% set upvotePossible = 1 %}
+            {% set downvotePossible = 1 %}
+            {% for vote in post.votes %}
+                {% if vote.getUser().id == app.user.id %}
+                    {% if vote.type %}
+                        {% set upvotePossible = 0 %}
+                    {% else %}
+                        {% set downvotePossible = 0 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if upvotePossible %}
+                <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% else %}
+                <img class="up-vote-toggled" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% endif %}
+            <span class="nb-vote" style="color:red;" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
+            {% if downvotePossible %}
+                <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% else %}
+                <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% endif %}
+        {% else %}
+            {{ post.getNbVotes() }}
+        {% endif %}
+        <!-- END VOTE SYSTEM -->
+        <h2 class="card-title post-title">
+            <a href="{{ url('post',{'id': post.id}) }}">
+                {{ post.getTitle() }}
+            </a>
+        </h2>
+        </h4>
+        <div class="post-meta">
+            Posted 
+            {% if app.request.get('_route') != "users" and app.request.get('_route') != "profile" %}
+                by <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
+            {% endif %}
+            on the {{ post.getCreatedAt()|date('d/m/Y \\a\\t h:i') }}
+        </div>
+    </div>
+</div>
+
+{% if app.request.get('_route') == "post" or app.request.get('_route') == "users" %}
+    <div class="blockquote mb-5 mx-4">
+        {{ post.body }}
+    </div>
+
+    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for comment in post.comments %}
+                <li class="list-group-item">
+                    <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
+                    - {{ comment.createdAt|date("d/m/Y \\a\\t h:i") }}
+                    <p> {{ comment.body }} </p>
+                </li>
+            {% endfor %}
+
+            <!-- COMMENT SYSTEM -->
+            {% if app.request.get('_route') == "post" %}
+                <li id="comment-sys-pannel" class="list-group-item collapse comment-sys">
+                    {% if userLoggedIn %}
+                        <!-- COMMENT FORM -->
+                        {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
+                        <div class="d-flex flex-row justify-content-center">
+                            {{ form_widget(commentForm.body) }}
+                            <button type="submit" class="btn btn-secondary ml-3">Submit</button>
+                        </div>
+                        {{ form_end(commentForm) }}
+                        <!-- END COMMENT FORM -->
+                    {% endif %}
+                </li>
+            {% endif %}
+        </ul>
+        {% if app.request.get('_route') == "post" %}
+            <a 
+                id="comment-sys-btn"
+                href=".comment-sys" 
+                class="card-footer bg-primary text-white text-center text-decoration-none font-weight-bolder comment-sys collapse show"
+                data-toggle="collapse" 
+                role="button" 
+                aria-expanded="false" 
+                aria-controls="comment-sys-pannel comment-sys-btn"
+            >
+                Add a comment
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
