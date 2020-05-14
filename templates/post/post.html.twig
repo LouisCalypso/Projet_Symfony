@@ -1,10 +1,10 @@
 <div class="card mb-4 flex-row align-items-center">
     {% if post.getImage() %}
-        <img src="{{ post.getImage() }}" class="rounded" alt="Post image" width="200">
+        <img src="{{ post.getImage() }}" class="mr-4 rounded" alt="Post image" width="200">
     {% endif %}
     <div class="card-body {{ post.getImage() ? : "text-center" }}">
-        <h4 style="color:red;">
         <!-- VOTE SYSTEM -->
+        <h4 style="color:red;">
         {% if app.user %}
             {% set upvotePossible = 1 %}
             {% set downvotePossible = 1 %}
@@ -31,14 +31,14 @@
         {% else %}
             {{ post.getNbVotes() }}
         {% endif %}
+        </h4>
         <!-- END VOTE SYSTEM -->
-        <h2 class="card-title post-title">
+        <h2 class="display-4 post-title">
             <a href="{{ url('post',{'id': post.id}) }}">
                 {{ post.getTitle() }}
             </a>
         </h2>
-        </h4>
-        <div class="post-meta">
+        <div class="lead post-meta">
             Posted 
             {% if app.request.get('_route') != "users" and app.request.get('_route') != "profile" %}
                 by <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
@@ -63,35 +63,29 @@
                     <p> {{ comment.body }} </p>
                 </li>
             {% endfor %}
-
-            <!-- COMMENT SYSTEM -->
-            {% if app.request.get('_route') == "post" %}
-                <li id="comment-sys-pannel" class="list-group-item collapse comment-sys">
-                    {% if userLoggedIn %}
-                        <!-- COMMENT FORM -->
-                        {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
-                        <div class="d-flex flex-row justify-content-center">
-                            {{ form_widget(commentForm.body) }}
-                            <button type="submit" class="btn btn-secondary ml-3">Submit</button>
-                        </div>
-                        {{ form_end(commentForm) }}
-                        <!-- END COMMENT FORM -->
-                    {% endif %}
-                </li>
-            {% endif %}
         </ul>
+
+        <!-- COMMENT SYSTEM -->
         {% if app.request.get('_route') == "post" %}
-            <a 
-                id="comment-sys-btn"
-                href=".comment-sys" 
-                class="card-footer bg-primary text-white text-center text-decoration-none font-weight-bolder comment-sys collapse show"
-                data-toggle="collapse" 
-                role="button" 
-                aria-expanded="false" 
-                aria-controls="comment-sys-pannel comment-sys-btn"
+            <div class="card-footer d-none comment-sys">
+                {% if userLoggedIn %}
+                    <!-- COMMENT FORM -->
+                    {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
+                    {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
+                    <div class="d-flex flex-row justify-content-center">
+                        {{ form_widget(commentForm.body) }}
+                        <button type="submit" class="btn btn-secondary ml-3">Submit</button>
+                    </div>
+                    {{ form_end(commentForm) }}
+                    <!-- END COMMENT FORM -->
+                {% endif %}
+            </div>
+            <input 
+                type="button"
+                class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
+                value="Add a comment"
+                onClick="$('.comment-sys').toggleClass('d-none')" 
             >
-                Add a comment
-            </a>
         {% endif %}
     </div>
 {% endif %}
