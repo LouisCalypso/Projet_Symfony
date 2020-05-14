@@ -23,10 +23,9 @@ class SearchController extends AbstractController
     /**
      * @Route("/search/{page}", name="search", defaults={"page"=1})
      */
-    public function index(Request $req)
+    public function index(Request $req, int $page)
     {
         $query = $req->query->get("q");
-        $page = $req->query->get("page");
         if ($page < 1) $page = 1;
 
         $user = $this->security->getUser();

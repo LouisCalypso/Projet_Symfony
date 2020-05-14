@@ -6,7 +6,10 @@
         <div class="overlay"></div>
         <div class="container">
             <div class="site-heading text-center">
-                <h1>Results for "{{ query }}"</h1>
+                <h1>{{ posts|length }} result{% if posts|length > 1 %}s{% endif %} for "{{ query }}"</h1>
+                {% if posts|length == 0 %}
+                    <span class="subheading">Sorry ...</span>
+                {% endif %}
             </div>
         </div>
     </header>
