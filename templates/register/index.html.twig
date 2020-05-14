@@ -8,8 +8,8 @@
         <div class="overlay"></div>
         <div class="container">
             <div class="site-heading text-center">
-            {% if app.user %}
-                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            {% if userLoggedIn %}
+                You are logged in as {{ userLoggedIn.username }}, <a href="{{ path('app_logout') }}">Logout</a>
             {% else %}
                 <h1>Please sign up</h1>
                 <span class="subheading">Tell us about you</span>

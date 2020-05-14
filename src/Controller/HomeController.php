@@ -40,9 +40,10 @@ class HomeController extends AbstractController
         );
         
         return $this->render('home/index.html.twig', [
+            'userLoggedIn' => $user,
+            'routeName' => 'home',
             'posts' => $posts,
             'pagination' => $pagination,
-            'userLoggedIn' => $user
         ]);
     }
 
