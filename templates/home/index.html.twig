@@ -33,6 +33,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="post-preview mr-4">
                                 <h2 class="post-title">
+
                                     {% if userLoggedIn %}
                                         {% if upvotePossible %}
                                             <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
@@ -46,7 +47,7 @@
                                             <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
                                         {% endif %}
                                     {% endif %}
-                                    <a href="">
+                                    <a href="{{ url('post', {"id": post.getId() } )}}">
                                      {{ post.getTitle() }}
                                     </a>
                                 </h2>

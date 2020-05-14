@@ -60,16 +60,23 @@ class HomeController extends AbstractController
         $vote->setUser($user);
         foreach($post->getVotes() as $voteVar) {
             if($voteVar->getUser()->getId() == $user->getId()) {
+                if($voteVar->getType() == 1){
+                    $post->decrementNbVotes();
+                }else{
+                    $post->incrementNbVotes();
+                }
                 $post->removeVote($voteVar);
                 $manager->remove($voteVar);
             }
         }
         if($type == "up-vote"){
             $vote->setType(1);
-            $post->incrementNbVotes($vote);
+            $post->incrementNbVotes();
+            $post->addVote($vote);
         }else{
             $vote->setType(0);
-            $post->decrementNbVotes($vote);
+            $post->decrementNbVotes();
+            $post->addVote($vote);
         }
         $user->addVote($vote);
         
