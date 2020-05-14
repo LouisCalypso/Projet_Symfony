@@ -4,27 +4,26 @@
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3" >
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
             {% if userLoggedIn %}
-                You are logged in as {{ userLoggedIn.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                <h3>You are logged in as {{ userLoggedIn.username }}, <a href="{{ path('app_logout') }}">Logout</a> ?</h3>
             {% else %}
                 <h1>Please sign up</h1>
                 <span class="subheading">Tell us about you</span>
             {% endif %}
-            </div>
         </div>
     </header>
 
-    <div class="container">
-        {% form_theme userFormType 'bootstrap_4_horizontal_layout.html.twig' %}
-        {{ form_start(userFormType) }}
-        {{ form_row(userFormType.email) }}
-        {{ form_row(userFormType.username) }}
-        {{ form_row(userFormType.password ) }}
-        <button type="submit" class="btn btn-primary ">Submit</button>
-        {{ form_end(userFormType) }}
-    </div>
+    {% if not userLoggedIn %}
+        <div class="container col-7">
+            {% form_theme userFormType 'bootstrap_4_horizontal_layout.html.twig' %}
+            {{ form_start(userFormType) }}
+            {{ form_row(userFormType.email) }}
+            {{ form_row(userFormType.username) }}
+            {{ form_row(userFormType.password ) }}
+            <button type="submit" class="btn btn-primary ">Submit</button>
+            {{ form_end(userFormType) }}
+        </div>
+    {% endif %}
 {% endblock %}

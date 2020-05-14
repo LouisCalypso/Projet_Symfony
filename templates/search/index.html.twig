@@ -2,47 +2,41 @@
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
-                <h1>{{ posts|length }} result{% if posts|length > 1 %}s{% endif %} for "{{ query }}"</h1>
-                {% if posts|length == 0 %}
-                    <span class="subheading">Sorry ...</span>
-                {% endif %}
-            </div>
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <h1>{{ posts|length }} result{% if posts|length > 1 %}s{% endif %} for "{{ query }}"</h1>
+            {% if posts|length == 0 %}
+                <span class="subheading">Sorry ...</span>
+            {% endif %}
         </div>
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <div class="col-lg-10 mx-auto">
-            {% for post in posts %}
-                {% include "post/post.html.twig" %}
-            {% endfor %}
+    <div class="container col-7">
+        {% for post in posts %}
+            {% include "post/post.html.twig" %}
+        {% endfor %}
 
-            {% if pagination.nbPages > 0 %}
-                {% if pagination.page > 1 %}
-                    <div class="clearfix">
-                        <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page-1, 'q': query})) }}">
-                            Newer posts
-                        </a>
-                    </div>
-                {% endif %}
-
-                {% if pagination.page < pagination.nbPages %}
-                    <div class="clearfix">
-                        <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                            pagination.paramsRoute|merge({'page': pagination.page+1, 'q': query})) }}">
-                            Older posts
-                        </a>
-                    </div>
-                {% endif %}
+        {% if pagination.nbPages > 0 %}
+            {% if pagination.page > 1 %}
+                <div class="clearfix">
+                    <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page-1, 'q': query})) }}">
+                        Newer posts
+                    </a>
+                </div>
             {% endif %}
-        </div>
+
+            {% if pagination.page < pagination.nbPages %}
+                <div class="clearfix">
+                    <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page+1, 'q': query})) }}">
+                        Older posts
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
     </div>
-    <br />
 {% endblock %}
 
 
