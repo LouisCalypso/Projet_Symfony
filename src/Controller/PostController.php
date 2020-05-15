@@ -63,7 +63,8 @@ class PostController extends AbstractController
         }
 
         return $this->render('post/show.html.twig', [
-            //'controller_name' => 'PostController',
+            'userLoggedIn' => $user,
+            'routeName' => 'post',
             'post' => $post,
             'commentForm' => $commentForm->createView(),
             'userLoggedIn' => $user

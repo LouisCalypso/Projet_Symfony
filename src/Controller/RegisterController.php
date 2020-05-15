@@ -7,14 +7,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 
 class RegisterController extends AbstractController
 {
     private $encoder;
+    private $security;
 
-    public function __construct(UserPasswordEncoderInterface $encoder)
+    public function __construct(UserPasswordEncoderInterface $encoder, Security $security)
     {
         $this->encoder = $encoder;
+        $this->security = $security;
     }
 
     /**
@@ -54,8 +57,9 @@ class RegisterController extends AbstractController
         }
 
         return $this->render('register/index.html.twig', [
-            'controller_name' => 'RegisterController',
-            'userFormType' => $userFormType->createView()
+            'userLoggedIn' => $this->security->getUser(),
+            'routeName' => 'register',
+            'userFormType' => $userFormType->createView(),
         ]);
     }
 }

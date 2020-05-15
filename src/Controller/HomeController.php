@@ -26,7 +26,7 @@ class HomeController extends AbstractController
      * @Route("/", name="root")
      * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
-    public function index(int $page)
+    public function index(int $page = 1)
     {
         if ($page < 1 ) $page = 1;
         
@@ -40,9 +40,10 @@ class HomeController extends AbstractController
         );
         
         return $this->render('home/index.html.twig', [
+            'userLoggedIn' => $user,
+            'routeName' => 'home',
             'posts' => $posts,
             'pagination' => $pagination,
-            'userLoggedIn' => $user
         ]);
     }
 

@@ -5,3 +5,7 @@
 .up-vote-toggled, .down-vote-toggled {
     cursor: not-allowed;
 }
+
+a:hover {
+    text-decoration: none;
+}
