@@ -3,18 +3,26 @@
 {% block title %}{{ userLoggedIn.username }}{% endblock %}
 
 {% block body %}
-    <!-- Page Header -->
-    <header class="masthead p-5 my-3" >
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
-                <h1>{{ userLoggedIn.username }}</h1>
+    <div class="container">
+        <div class="card bg-light mt-5">
+            <h2 class="card-header">Posts :</h2>
+            <div class="card-body">
+                {% for post in userLoggedIn.posts %}
+                    {% include "post/post.html.twig" with {'routeName':'profile'} %}
+                {% endfor %}
             </div>
         </div>
-    </header>
+    </div>
 
     <div class="container">
-    content<br/>
-    <a class="btn btn-primary" href="{{url('app_logout')}}"> Logout </a>
+        <div class="card bg-light mt-4">
+            <h2 class="card-header">Comments :</h2>
+            <div class="card-body">
+                {% for comment in userLoggedIn.userComments %}
+                    <h5 class="card-title">{{ userLoggedIn.username }} commented on "<a href="{{ url('post',{'id': comment.post.id}) }}">{{ comment.post.title}}</a>" :</h5>
+                    <p class=""card-text>{{ comment.body }}</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}
