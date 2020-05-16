@@ -44,10 +44,14 @@ class UserController extends AbstractController
             return $this->redirectToRoute('root');
 
         $userVisited = $this->userRepository->find($id);
+        $userLoggedIn = $this->security->getUser();
+        if($userLoggedIn->getId() == $id) {
+            return $this->me();
+        }
         return $this->render('user/him.html.twig',[
-            'userLoggedIn' => $this->security->getUser(),
+            'userLoggedIn' => $userLoggedIn,
             'routeName' => 'post',
-            'userVisited'=>$userVisited
+            'userVisited'=> $userVisited
         ]);
     }
 

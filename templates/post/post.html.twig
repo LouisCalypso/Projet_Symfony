@@ -43,24 +43,24 @@
             {% if routeName != "users" and routeName != "profile" %}
                 by <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
             {% endif %}
-            on the {{ post.getCreatedAt()|date('d/m/Y \\a\\t h:i') }}
+            on {{ post.getCreatedAt()|date('d/m/Y \\a\\t h:i') }}
         </div>
     </div>
 </div>
 
 {% if routeName == "post" or routeName == "users" %}
-    <div class="blockquote mb-5 mx-4">
+    <div class="card bg-light blockquote mb-5 p-4">
         {{ post.body }}
     </div>
 
     <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
     <div class="card">
         <ul class="list-group list-group-flush">
-            {% for comment in post.comments %}
+            {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
                 <li class="list-group-item">
                     <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
                     - {{ comment.createdAt|date("d/m/Y \\a\\t h:i") }}
-                    <p> {{ comment.body }} </p>
+                    <p> {{ comment.body|raw }} </p>
                 </li>
             {% endfor %}
         </ul>
@@ -80,11 +80,11 @@
                     <!-- END COMMENT FORM -->
                 {% endif %}
             </div>
-            <input 
+            <input
                 type="button"
                 class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
                 value="Add a comment"
-                onClick="$('.comment-sys').toggleClass('d-none')" 
+                onClick="$('.comment-sys').toggleClass('d-none')"
             >
         {% endif %}
     </div>
