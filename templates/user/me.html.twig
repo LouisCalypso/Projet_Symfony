@@ -3,26 +3,22 @@
 {% block title %}{{ userLoggedIn.username }}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="card bg-light mt-5">
-            <h2 class="card-header">Posts :</h2>
-            <div class="card-body">
-                {% for post in userLoggedIn.posts %}
-                    {% include "post/post.html.twig" with {'routeName':'profile'} %}
-                {% endfor %}
-            </div>
+    <!-- Page Header -->
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <h1>{{ userLoggedIn.username }}</h1>
+            <span class="subheading">Joined on {{ userLoggedIn.createdAt|date('d/m/Y \\a\\t h:i') }}</span>
         </div>
-    </div>
+    </header>
 
+    <!-- Content -->
     <div class="container">
-        <div class="card bg-light mt-4">
-            <h2 class="card-header">Comments :</h2>
-            <div class="card-body">
-                {% for comment in userLoggedIn.userComments %}
-                    <h5 class="card-title">{{ userLoggedIn.username }} commented on "<a href="{{ url('post',{'id': comment.post.id}) }}">{{ comment.post.title}}</a>" :</h5>
-                    <p class=""card-text>{{ comment.body }}</p>
-                {% endfor %}
-            </div>
+        <h2 class="">Posts</h2>
+        <hr>
+        <div class="mx-4">
+            {% for post in userLoggedIn.posts %}
+                {% include "post/post.html.twig" with {'routeName':'profile'} %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
