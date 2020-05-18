@@ -1,6 +1,6 @@
 <div class="card mb-4 flex-row align-items-center">
     {% if post.getImage() %}
-        <img src="{{ post.getImage() }}" class="mr-4 rounded" alt="Post image" width="200">
+        <img src="{{ post.getImage() }}" class="mr-4 rounded-left" alt="Post image" width="200">
     {% endif %}
     <div class="card-body {{ post.getImage() ? : "text-center" }}">
         <!-- VOTE SYSTEM -->
@@ -43,20 +43,22 @@
             {% if routeName != "users" and routeName != "profile" %}
                 by <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
             {% endif %}
-            on the {{ post.getCreatedAt()|date('d/m/Y \\a\\t h:i') }}
+            on {{ post.getCreatedAt()|date('d/m/Y \\a\\t h:i') }}
         </div>
     </div>
 </div>
 
-{% if routeName == "post" or routeName == "users" %}
-    <div class="blockquote mb-5 mx-4">
-        {{ post.body }}
-    </div>
+{% if routeName == "post" or routeName == "users" or routeName == "profile" %}
+    {% if post.body %}
+        <div class="bg-light rounded blockquote p-4">
+            {{ post.body }}
+        </div>
+    {% endif %}
 
-    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+    <h4 class="mx-4 mt-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
     <div class="card">
         <ul class="list-group list-group-flush">
-            {% for comment in post.comments %}
+            {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
                 <li class="list-group-item">
                     <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
                     - {{ comment.createdAt|date("d/m/Y \\a\\t h:i") }}
@@ -66,7 +68,7 @@
         </ul>
 
         <!-- COMMENT SYSTEM -->
-        {% if routeName == "post" %}
+        {% if routeName == "post" and userLoggedIn %}
             <div class="card-footer d-none comment-sys">
                 {% if userLoggedIn %}
                     <!-- COMMENT FORM -->
@@ -80,11 +82,11 @@
                     <!-- END COMMENT FORM -->
                 {% endif %}
             </div>
-            <input 
+            <input
                 type="button"
                 class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
                 value="Add a comment"
-                onClick="$('.comment-sys').toggleClass('d-none')" 
+                onClick="$('.comment-sys').toggleClass('d-none')"
             >
         {% endif %}
     </div>

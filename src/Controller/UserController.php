@@ -18,7 +18,7 @@ class UserController extends AbstractController
         $this->userRepository = $userRepository;
         $this->security = $security;
     }
-
+    
     /**
      * @Route("/profile", name="profile")
      */
@@ -27,13 +27,15 @@ class UserController extends AbstractController
         // if no login redirect to login
         if(($user = $this->security->getUser()) == null)
             return $this->redirectToRoute('app_login');
-
+        
+        $user = $this->userRepository->find($user->getId());
+            
         return $this->render('user/me.html.twig',[
             'userLoggedIn' => $user,
-            'routeName' => 'post',
+            'routeName' => 'profile',
         ]);
     }
-
+    
     /**
      * @Route("/users/{id}", name="users")
      */
@@ -42,13 +44,19 @@ class UserController extends AbstractController
         // if no user id redirect to root
         if($id == null)
             return $this->redirectToRoute('root');
-
+        
         $userVisited = $this->userRepository->find($id);
+        $userLoggedIn = $this->security->getUser();
+
+        if($userLoggedIn->getId() == $id)
+            return $this->me();
+
         return $this->render('user/him.html.twig',[
-            'userLoggedIn' => $this->security->getUser(),
+            'userLoggedIn' => $userLoggedIn,
             'routeName' => 'post',
-            'userVisited'=>$userVisited
+            'userVisited'=> $userVisited
         ]);
     }
-
+        
 }
+    

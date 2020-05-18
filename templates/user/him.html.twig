@@ -4,18 +4,24 @@
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3" >
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
-                <h1>{{ userVisited.username }}</h1>
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <div class=" d-flex justify-content-between">
+                <div>Send email : <a href="mailto:{{ userVisited.email }}">{{ userVisited.email }}</a></div>
+                <div>Joined on {{ userVisited.createdAt|date('d/m/Y \\a\\t h:i') }}</div>
             </div>
+            <h1>{{ userVisited.username }}</h1>
         </div>
     </header>
 
+    <!-- Content -->
     <div class="container">
-    {% for post in userVisited.posts %}
-        {% include "post/post.html.twig" %}
-    {% endfor %}
+        <h2 class="">Posts</h2>
+        <hr>
+        <div class="mx-4">
+            {% for post in userVisited.posts %}
+                {% include "post/post.html.twig" with {'routeName':'profile'} %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
