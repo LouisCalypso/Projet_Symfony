@@ -42,6 +42,7 @@
         <form class="form-inline ml-auto" action="{{ url('search') }}">
             <input class="form-control mr-sm-2" type="search" placeholder="Which dog ?" aria-label="Search" name="q"
                 {% if query is defined %} value="{{ query }}" {% endif %}
+                required
             >
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
