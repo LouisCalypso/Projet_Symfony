@@ -1,6 +1,9 @@
 <div class="card mb-4 flex-row align-items-center">
     {% if post.getImage() %}
-        <img src="{{ asset(post.getImage()) }}" class="mr-4 rounded-left" alt="Post image" width="200">
+
+        <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="mr-4 rounded-left" alt="Post image" width="200">
+
+
     {% endif %}
     <div class="card-body {{ post.getImage() ? : "text-center" }}">
         <!-- VOTE SYSTEM -->

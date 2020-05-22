@@ -26,8 +26,7 @@ class PostCreationController extends AbstractController
                 ->setNbVotes(0)
                 ->setCreatedAt(new \DateTime())
                 ->setUser($this->getUser())
-                ->setLink(null)
-                ->setImage(null);
+                ->setLink(null);
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($post);
             $manager->flush();

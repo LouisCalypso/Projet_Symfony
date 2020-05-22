@@ -44,7 +44,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             $directory = 'public/storage/uploads';
             $files = array_diff(scandir($directory), array('..', '.'));
             $random_index = array_rand($files);
-            $path = "storage/uploads/" . $files[$random_index];
+            $path = $files[$random_index];
             $post->setImage($path);
 
 
