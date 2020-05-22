@@ -1,20 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ app.user.username }}{% endblock %}
+{% block title %}{{ userLoggedIn.username }}{% endblock %}
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3" >
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
-                <h1>{{ app.user.username }}</h1>
-            </div>
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <h1>{{ userLoggedIn.username }}</h1>
+            <span class="subheading">Joined on {{ userLoggedIn.createdAt|date('d/m/Y \\a\\t h:i') }}</span>
         </div>
     </header>
 
+    <!-- Content -->
     <div class="container">
-    content<br/>
-    <a class="btn btn-primary" href="{{url('app_logout')}}"> Logout </a>
+        <h2 class="">Posts</h2>
+        <hr>
+        <div class="mx-4">
+            {% for post in userLoggedIn.posts %}
+                {% include "post/post.html.twig" with {'routeName':'profile'} %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

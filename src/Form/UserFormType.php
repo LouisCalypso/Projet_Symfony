@@ -20,7 +20,7 @@ class UserFormType extends AbstractType
             ->add('username')
             ->add('password',RepeatedType::class,['type'=>PasswordType::class,
                                                             'first_options'  => ['label' => 'Password'],
-                                                            'second_options' => ['label' => 'Repeat Password'],])
+                                                            'second_options' => ['label' => 'Confirm'],])
         ;
     }
 

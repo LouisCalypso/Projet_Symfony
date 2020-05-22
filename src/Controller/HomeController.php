@@ -12,13 +12,24 @@ use Symfony\Component\Security\Core\Security;
 
 class HomeController extends AbstractController
 {
+    
+    private $postRepository;
+    private $security;
+    
+    public function __construct(PostRepository $postRepository, Security $security)
+    {
+        $this->postRepository = $postRepository;
+        $this->security = $security;
+    }
+    
     /**
      * @Route("/", name="root")
-     * @Route("/home/{page}", name="home")
+     * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
     public function index(int $page = 1)
     {
         if ($page < 1 ) $page = 1;
+        
         $user = $this->security->getUser();
         $posts = $this->postRepository->findAllPagine($page, 3, $user); // ici mais on peut mettre autre chose (3 par page là)
         $pagination = array(
@@ -29,19 +40,11 @@ class HomeController extends AbstractController
         );
         
         return $this->render('home/index.html.twig', [
+            'userLoggedIn' => $user,
+            'routeName' => 'home',
             'posts' => $posts,
             'pagination' => $pagination,
-            'userLoggedIn' => $user
         ]);
-    }
-    
-    private $postRepository;
-    private $security;
-    
-    public function __construct(PostRepository $postRepository, Security $security)
-    {
-        $this->postRepository = $postRepository;
-        $this->security = $security;
     }
 
     /**
@@ -58,16 +61,23 @@ class HomeController extends AbstractController
         $vote->setUser($user);
         foreach($post->getVotes() as $voteVar) {
             if($voteVar->getUser()->getId() == $user->getId()) {
+                if($voteVar->getType() == 1){
+                    $post->decrementNbVotes();
+                }else{
+                    $post->incrementNbVotes();
+                }
                 $post->removeVote($voteVar);
                 $manager->remove($voteVar);
             }
         }
         if($type == "up-vote"){
             $vote->setType(1);
-            $post->incrementNbVotes($vote);
+            $post->incrementNbVotes();
+            $post->addVote($vote);
         }else{
             $vote->setType(0);
-            $post->decrementNbVotes($vote);
+            $post->decrementNbVotes();
+            $post->addVote($vote);
         }
         $user->addVote($vote);
         

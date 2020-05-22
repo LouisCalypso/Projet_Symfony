@@ -2,87 +2,37 @@
 
 {% block body %}
     <!-- Page Header -->
-    <header class="masthead p-5 my-3">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="site-heading text-center">
-                <h1>SymfoDoggos</h1>
-                <span class="subheading">Reddit, mais pour les doggos</span>
-            </div>
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <h1>SymfoDoggos</h1>
+            <span class="subheading">Reddit, mais pour les doggos</span>
         </div>
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-md-10 mx-auto">
-                {% for post in posts %}
-                    {% set upvotePossible = 1 %}
-                    {% set downvotePossible = 1 %}
-                    {% for vote in post.votes %}
-                        {% if userLoggedIn %}
-                            {% if vote.getUser().id == userLoggedIn.id %}
-                                {% if vote.type %}
-                                    {% set upvotePossible = 0 %}
-                                {% else %}
-                                    {% set downvotePossible = 0 %}
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    <div class="d-flex justify-content-between">
-                        <div class="post-preview mr-4">
-                            {#<a href="{{ url('show', {"id": post.getId() } )}}">#}
-                                <h2 class="post-title">
-                                    {% if userLoggedIn %}
-                                        {% if upvotePossible %}
-                                            <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-                                        {% else %}
-                                            <img class="up-vote-toggled" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-                                        {% endif %}
-                                        <span class="nb-vote" style="color:red;" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
-                                        {% if downvotePossible %}
-                                            <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-                                        {% else %}
-                                            <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-                                        {% endif %}
-                                    {% endif %}
-                                    <a href="">
-                                     {{ post.getTitle() }}
-                                    </a>
-                                </h2>
+    <div class="container col-7">
+        {% for post in posts %}
+            {% include "post/post.html.twig" %}
+        {% endfor %}
 
-                            <p class="post-meta">Posted by
-                                <a href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
-                                on the {{ post.getCreatedAt()|date('d/m/Y') }}
-                            </p>
-                        </div>
-                    </div>
-                    <hr>
-                {% endfor %}
-                {% if pagination.nbPages > 0 %}
-                    {% if pagination.page > 1 %}
-                        <div class="clearfix">
-                            <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                                pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
-                                Newer posts
-                            </a>
-                        </div>
-                    {% endif %}
+        {% if pagination.nbPages > 0 %}
+            <div class="clearfix">
+                {% if pagination.page > 1 %}
+                    <a class="clearfix btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
+                        Newer posts
+                    </a>
+                {% endif %}
 
-                    {% if pagination.page < pagination.nbPages %}
-                        <div class="clearfix">
-                            <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                                pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
-                                Older posts
-                            </a>
-                        </div>
-                    {% endif %}
+                {% if pagination.page < pagination.nbPages %}
+                    <a class="clearfix btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
+                        pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
+                        Older posts
+                    </a>
                 {% endif %}
             </div>
-        </div>
+        {% endif %}
     </div>
-    <br />
 {% endblock %}
 
 
