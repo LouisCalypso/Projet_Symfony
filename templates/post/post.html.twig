@@ -1,11 +1,6 @@
-<div class="card mb-4 flex-row align-items-center">
-    {% if post.getImage() %}
-
-        <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="mr-4 rounded-left" alt="Post image" width="200">
-
-
-    {% endif %}
-    <div class="card-body {{ post.getImage() ? : "text-center" }}">
+<!-- HEAD -->
+<div class="{{ routeName == "home" ? "card" : routeName == "search" ? "card" }} mb-4">
+    <div class="card-body text-center">
         <!-- VOTE SYSTEM -->
         <h4 style="color:red;">
         {% if userLoggedIn %}
@@ -52,13 +47,30 @@
 </div>
 
 {% if routeName == "post" or routeName == "users" or routeName == "profile" %}
-    {% if post.body %}
-        <div class="bg-light rounded blockquote p-4">
-            {{ post.body }}
-        </div>
-    {% endif %}
+    <!-- CONTENT -->
+    <div class="d-flex flex-column align-items-center mb-4">
+        {% if post.body %}
+            <div class="bg-light rounded blockquote p-4 shadow-sm">
+                {{ post.body }}
+            </div>
+        {% endif %}
 
-    <h4 class="mx-4 mt-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+        {% if post.getImage() %}
+            <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="mr-4 rounded-left" alt="Post image" width="200">
+        {% endif %}
+
+        {% if post.link %}
+            <a 
+                class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold" 
+                href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
+            >
+                {{ post.link }}
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- COMMENTS -->
+    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
     <div class="card">
         <ul class="list-group list-group-flush">
             {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
