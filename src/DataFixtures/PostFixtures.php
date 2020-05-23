@@ -37,7 +37,17 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
 
             $post = new Post();
             $post->setTitle($faker->text($maxNbChars = 10));
-            $post->setImage($faker->imageUrl($width = 400, $height = 400));
+
+            //we get a random image (of a good girl) from a local dir
+            // we scan the dir and we remove the .. and . references
+            // a random index is selected
+            $directory = 'public/storage/uploads';
+            $files = array_diff(scandir($directory), array('..', '.'));
+            $random_index = array_rand($files);
+            $path = $files[$random_index];
+            $post->setImage($path);
+
+
             $post->setCreatedAt($faker->dateTime($max = 'now', $timezone = null));
             $post->setNbVotes(0);
             $this->addReference(self::POST.$i,$post);
