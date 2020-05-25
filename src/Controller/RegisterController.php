@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
@@ -23,7 +25,7 @@ class RegisterController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function index(Request $request)
+    public function index(Request $request, MailerInterface $mailer)
     {
         $userFormType = $this->createForm(UserFormType::class);
 
@@ -50,6 +52,15 @@ class RegisterController extends AbstractController
             // le flush dit à Doctrine d'exécuter les requêtes SQL permettant de créer/modifier les objets sur lesquels
             // on appelé ->persist()
             $manager->flush();
+
+            // Mail de confirmation d'inscritpion
+            $email = (new Email())
+                ->from('inscription@symfodoggos.com')
+                ->to($userFormType->getData()->getEmail()) //->to('louis.duretete@gmail.com')
+                ->subject('Bienvenue sur SymfoDoggos!')
+                ->html("<p>Nous vous confirmons l'inscritpion sur symfodoggos.com !</p><p>http://localhost:8080/</p>");
+
+            $mailer->send($email);
 
             // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
             // à nouveau le formulaire

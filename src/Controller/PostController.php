@@ -7,6 +7,8 @@ use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Comment;
 use Symfony\Component\Security\Core\Security;
@@ -24,7 +26,7 @@ class PostController extends AbstractController
     /**
      * @Route("/posts/{id}", name="post")
      */
-    public function show(Post $post, Request $request)
+    public function show(Post $post, Request $request, MailerInterface $mailer)
     {
 
         $user = $this->security->getUser();
@@ -56,6 +58,18 @@ class PostController extends AbstractController
             // le flush dit à Doctrine d'exécuter les requêtes SQL permettant de créer/modifier les objets sur lesquels
             // on appelé ->persist()
             $manager->flush();
+
+            //S'il ne s'agit pas du propriétaire du poste qui commente son poste
+            if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
+                // Mail de confirmation d'inscritpion
+               $email = (new Email())
+                    ->from('ig2i@symfodoggos.com')
+                    ->to($post->getUser()->getEmail()) //->to('louis.duretete@gmail.com')
+                    ->subject("Quelqu'un a commenté votre poste : ".$post->getTitle()." !")
+                    ->html("<p>".$this->getUser()->getUsername()." a commenté votre poste : <b>".$post->getTitle()." </b>!</p>
+                                    <p>Vous pouvez voir ce qu'il/elle a dit avec ce lien : http://localhost:8080/posts/".$post->getId()."</p>");
+                $mailer->send($email);
+            }
 
             // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
             // à nouveau le formulaire
