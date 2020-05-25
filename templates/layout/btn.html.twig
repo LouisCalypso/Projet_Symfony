@@ -1,12 +1,23 @@
 {% if userLoggedIn %}
-    <a 
-        class="d-flex bg-primary rounded-circle border-0 align-items-center justify-content-center overflow-hidden"
+    <a
+        data-target="{{ path('create-post')}}" data-tooltip="voir"
+        class="modal-trigger d-flex bg-primary rounded-circle border-0 align-items-center justify-content-center overflow-hidden"
         style="position: fixed; right: 60px; bottom: 60px; width: 80px; height: 80px;"
-        href="#"
+        href="#modal1"
     >
         <img
             src="{{ asset("/img/pen.png") }}" width="66" height="66"
             style="position: relative; left: 15%; bottom: 15%;"
         />
     </a>
+
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            A bunch of text
+        </div>
+            <div class="modal-footer"><a class="modal-close waves-effect waves-green btn-flat" href="#!">Close</a></div>
+
+    </div>
 {% endif %}

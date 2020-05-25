@@ -1,0 +1,12 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+        <h5 class="card-header">Post your Doggo !</h5>
+<div class="card-body">
+{{ form_start(postForm, {'action': path('create-post')}) }}
+
+    <div class="d-flex flex-row justify-content-center">
+
+        <button type="submit" class="btn btn-secondary ml-3">It's a good boy !</button>
+    </div>
+    {{ form_end(postForm) }}
+</div>
+</div>

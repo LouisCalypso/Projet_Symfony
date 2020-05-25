@@ -48,7 +48,7 @@ class UserController extends AbstractController
         $userVisited = $this->userRepository->find($id);
         $userLoggedIn = $this->security->getUser();
 
-        if($userLoggedIn->getId() == $id)
+        if($userLoggedIn && $userLoggedIn->getId() == $id)
             return $this->me();
 
         return $this->render('user/him.html.twig',[
