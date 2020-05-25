@@ -34,6 +34,9 @@
                 >
                     Login
                 </a>
+                <a class="nav-item nav-link" href="{{ url('register') }}">
+                    Register
+                </a>
             {% endif %}
         </div>
         {% if app.user and routeName != 'profile' %}
