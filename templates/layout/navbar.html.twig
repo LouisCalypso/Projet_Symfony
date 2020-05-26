@@ -23,16 +23,18 @@
                 <a class="nav-item nav-link" href="{{ url('app_logout') }}">
                     Logout
                 </a>
-            {% elseif routeName == 'register' %}
-                <a class="nav-item nav-link active" href="{{ url('register') }}">
-                    Register
-                </a>
             {% else %}
                 <a 
                     class="nav-item nav-link {{ routeName == 'app_login' ? 'active' }}"
                     href="{{ url('app_login') }}"
                 >
                     Login
+                </a>
+                <a 
+                    class="nav-item nav-link {{ routeName == 'register' ? 'active' }}"
+                    href="{{ url('register') }}"
+                >
+                    Register
                 </a>
             {% endif %}
         </div>
