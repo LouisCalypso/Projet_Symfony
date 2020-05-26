@@ -8,7 +8,7 @@
         <div class="site-heading text-center">
             <div class=" d-flex justify-content-between">
                 <div>Send email : <a href="mailto:{{ userVisited.email }}">{{ userVisited.email }}</a></div>
-                <div>Joined on {{ userVisited.createdAt|date('d/m/Y \\a\\t h:i') }}</div>
+                <div>Joined on {{ userVisited.createdAt|date('d/m/Y \\a\\t H:i') }}</div>
             </div>
             <h1>{{ userVisited.username }}</h1>
         </div>

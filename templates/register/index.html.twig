@@ -22,7 +22,15 @@
             {{ form_row(userFormType.email) }}
             {{ form_row(userFormType.username) }}
             {{ form_row(userFormType.password ) }}
-            <button type="submit" class="btn btn-primary ">Submit</button>
+            <div class="d-flex p-3 flex-row justify-content-between align-items-center">
+                <div>
+                    Already got an account ?
+                    <a href="{{ url('app_login') }}">Sign in !</a>
+                </div>
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Sign in
+                </button>
+            </div>
             {{ form_end(userFormType) }}
         </div>
     {% endif %}

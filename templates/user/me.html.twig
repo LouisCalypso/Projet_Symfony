@@ -6,8 +6,8 @@
     <!-- Page Header -->
     <header class="container masthead p-5 mb-3">
         <div class="site-heading text-center">
+            <span class="subheading">Joined on {{ userLoggedIn.createdAt|date('d/m/Y \\a\\t H:i') }}</span>
             <h1>{{ userLoggedIn.username }}</h1>
-            <span class="subheading">Joined on {{ userLoggedIn.createdAt|date('d/m/Y \\a\\t h:i') }}</span>
         </div>
     </header>
 

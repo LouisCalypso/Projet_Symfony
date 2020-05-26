@@ -1,12 +1,15 @@
-<div class="col-lg-8 col-md-10 mx-auto">
-        <h5 class="card-header">Post your Doggo !</h5>
-<div class="card-body">
-{{ form_start(postForm, {'action': path('create-post')}) }}
-
-    <div class="d-flex flex-row justify-content-center">
-
-        <button type="submit" class="btn btn-secondary ml-3">It's a good boy !</button>
-    </div>
-    {{ form_end(postForm) }}
+<div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="display-4">Post your Doggo !</h4>
 </div>
+<div class="modal-body clearfix">
+    {% form_theme postForm 'bootstrap_4_horizontal_layout.html.twig' %}
+    {{ form_start(postForm, {'action': path('create-post')}) }}
+        {{ form_row(postForm.title) }}
+        {{ form_row(postForm.body) }}
+        {{ form_row(postForm.imageFile) }}
+        <button type="submit" class="btn btn-secondary float-right">It's a good boy !</button>
+    {{ form_end(postForm) }}
 </div>
