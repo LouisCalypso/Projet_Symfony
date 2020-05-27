@@ -16,12 +16,14 @@
 
     <!-- Content -->
     <div class="container">
-        <h2 class="">Posts</h2>
-        <hr>
-        <div class="mx-4">
-            {% for post in userVisited.posts %}
-                {% include "post/post.html.twig" with {'routeName':'profile'} %}
-            {% endfor %}
-        </div>
+        {% if userLoggedIn.posts|length %}
+            <h2 class="">Posts</h2>
+            <hr>
+            <div class="mx-4">
+                {% for post in userVisited.posts %}
+                    {% include "post/post.html.twig" with {'routeName':'profile'} %}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
