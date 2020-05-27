@@ -1,7 +1,7 @@
-<div class="post" >
+<div class="post border border-white" >
 
     {% if routeName == "profile" %}
-        <a class="close delete-post" title="Delete" data-id="{{ post.getId() }}">
+        <a class="close delete-post m-2" data-toggle="tooltip" data-placement="left" title="Delete ?" data-id="{{ post.getId() }}">
             <img src="{{ absolute_url(asset('img/trash.svg')) }}" width="25" />
         </a>
     {% endif %}

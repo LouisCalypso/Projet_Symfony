@@ -59,12 +59,15 @@ $(document).ready(function(){
     });
 
     $(".btn-panel").hover(
-        function(){
-            $(this).children(".btn-panel-collapse").collapse('show');
-        },
-        function(){
-            $(this).children(".btn-panel-collapse").collapse('hide');
-        }
+        function() {  $(this).children(".btn-panel-collapse").collapse('show'); },
+        function() { $(this).children(".btn-panel-collapse").collapse('hide'); }
+    );
+
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').parent().css("transition","ease .5s");
+    $('[data-toggle="tooltip"]').hover(
+        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); },
+        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); }
     );
 
     $(".delete-post").click(function () {
