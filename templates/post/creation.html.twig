@@ -6,10 +6,15 @@
 </div>
 <div class="modal-body clearfix">
     {% form_theme postForm 'bootstrap_4_horizontal_layout.html.twig' %}
-    {{ form_start(postForm, {'action': path('create-post')}) }}
+    {{ form_start(postForm, {'action': url('post/create', {'type': formType})}) }}
         {{ form_row(postForm.title) }}
-        {{ form_row(postForm.body) }}
-        {{ form_row(postForm.imageFile) }}
+        {% if formType == 'text' %}
+            {{ form_row(postForm.body) }}
+        {% elseif formType == 'link' %}
+            {{ form_row(postForm.link) }}
+        {% elseif formType == 'image' %}
+            {{ form_row(postForm.imageFile) }}
+        {% endif %}
         <button type="submit" class="btn btn-secondary float-right">It's a good boy !</button>
     {{ form_end(postForm) }}
 </div>
