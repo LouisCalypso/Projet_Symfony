@@ -1,109 +1,126 @@
-<!-- HEAD -->
-<div class="{{ routeName in "home search" ? "card" }} mb-4">
-    <div class="card-body text-center">
-        <!-- VOTE SYSTEM -->
-        <h4 style="color:red;">
-        {% if userLoggedIn %}
-            {% set upvotePossible = 1 %}
-            {% set downvotePossible = 1 %}
-            {% for vote in post.votes %}
-                {% if vote.getUser().id == userLoggedIn.id %}
-                    {% if vote.type %}
-                        {% set upvotePossible = 0 %}
+<div class="post" >
+
+    {% if routeName == "profile" %}
+        <a class="close delete-post" title="Delete" data-id="{{ post.getId() }}">
+            <img src="{{ absolute_url(asset('img/trash.svg')) }}" width="25" />
+        </a>
+    {% endif %}
+
+    <!-- HEAD -->
+    <div class="{{ routeName in "home search" ? "card" }} mb-4">
+        <div class="card-body text-center">
+            <!-- VOTE SYSTEM -->
+            <h4 style="color:red;">
+            {% if userLoggedIn %}
+                {% set upvotePossible = 1 %}
+                {% set downvotePossible = 1 %}
+                {% for vote in post.votes %}
+                    {% if vote.getUser().id == userLoggedIn.id %}
+                        {% if vote.type %}
+                            {% set upvotePossible = 0 %}
+                        {% else %}
+                            {% set downvotePossible = 0 %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if upvotePossible %}
+                    <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% else %}
+                    <img class="up-vote-toggled" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% endif %}
+                <span class="nb-vote" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
+                {% if downvotePossible %}
+                    <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% else %}
+                    <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% endif %}
+            {% else %}
+                {{ post.getNbVotes() }}
+            {% endif %}
+            </h4>
+            <!-- END VOTE SYSTEM -->
+            <h2 class="display-4 post-title">
+                <a href="{{ url('post',{'id': post.id}) }}">
+                    {{ post.getTitle() }}
+                </a>
+            </h2>
+            <div class="lead post-meta">
+                Posted 
+                {% if routeName != "users" and routeName != "profile" %}
+                        by
+                    {% if userLoggedIn != post.user %}
+                        <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
                     {% else %}
-                        {% set downvotePossible = 0 %}
+                        you
                     {% endif %}
                 {% endif %}
-            {% endfor %}
-            {% if upvotePossible %}
-                <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-            {% else %}
-                <img class="up-vote-toggled" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-            {% endif %}
-            <span class="nb-vote" style="color:red;" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
-            {% if downvotePossible %}
-                <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-            {% else %}
-                <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
-            {% endif %}
-        {% else %}
-            {{ post.getNbVotes() }}
-        {% endif %}
-        </h4>
-        <!-- END VOTE SYSTEM -->
-        <h2 class="display-4 post-title">
-            <a href="{{ url('post',{'id': post.id}) }}">
-                {{ post.getTitle() }}
-            </a>
-        </h2>
-        <div class="lead post-meta">
-            Posted 
-            {% if routeName != "users" and routeName != "profile" %}
-                by <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
-            {% endif %}
-            on {{ post.getCreatedAt()|date('d/m/Y \\a\\t H:i') }}
+                on {{ post.getCreatedAt()|date('d/m/Y \\a\\t H:i') }}
+            </div>
         </div>
     </div>
-</div>
 
-{% if routeName == "post" or routeName == "users" or routeName == "profile" %}
-    <!-- CONTENT -->
-    <div class="d-flex flex-column align-items-center mb-4">
+    {% if routeName != "home" and routeName != "search" %}
+        <!-- CONTENT -->
+        <div class="d-flex flex-column align-items-center mb-4">
 
-        {% if post.getImage() %}
-            <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="w-50 rounded mb-4" alt="Post image" width="200">
-        {% endif %}
+            {% if post.getImage() %}
+                <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="w-50 rounded mb-4" alt="Post image" width="200">
+            {% endif %}
 
-        {% if post.body %}
-            <div class="bg-light rounded blockquote p-4 w-100 shadow-sm mb-4">
-                {{ post.body }}
-            </div>
-        {% endif %}
+            {% if post.body %}
+                <div class="bg-light rounded blockquote p-4 w-100 shadow-sm mb-4">
+                    {{ post.body }}
+                </div>
+            {% endif %}
 
-        {% if post.link %}
-            <a 
-                class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold mb-4" 
-                href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
-            >
-                {{ post.link }}
-            </a>
-        {% endif %}
-    </div>
+            {% if post.link %}
+                <a 
+                    class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold mb-4" 
+                    href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
+                >
+                    {{ post.link }}
+                </a>
+            {% endif %}
+        </div>
 
-    <!-- COMMENTS -->
-    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
-    <div class="card">
-        <ul class="list-group list-group-flush">
-            {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
-                <li class="list-group-item">
-                    <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
-                    - {{ comment.createdAt|date("d/m/Y \\a\\t H:i") }}
-                    <p> {{ comment.body|raw }} </p>
-                </li>
-            {% endfor %}
-        </ul>
+        <!-- COMMENTS -->
+        {% if routeName != "profile" %}
+            <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
+                            - {{ comment.createdAt|date("d/m/Y \\a\\t H:i") }}
+                            <p> {{ comment.body|raw }} </p>
+                        </li>
+                    {% endfor %}
+                </ul>
 
-        <!-- COMMENT SYSTEM -->
-        {% if routeName == "post" and userLoggedIn %}
-            <div class="card-footer d-none comment-sys">
-                {% if userLoggedIn %}
-                    <!-- COMMENT FORM -->
-                    {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
-                    {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
-                    <div class="d-flex flex-row justify-content-center">
-                        {{ form_widget(commentForm.body) }}
-                        <button type="submit" class="btn btn-secondary ml-3">Submit</button>
+                <!-- COMMENT SYSTEM -->
+                {% if routeName == "post" and userLoggedIn %}
+                    <div class="card-footer d-none comment-sys">
+                        {% if userLoggedIn %}
+                            <!-- COMMENT FORM -->
+                            {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
+                            {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
+                            <div class="d-flex flex-row justify-content-center">
+                                {{ form_widget(commentForm.body) }}
+                                <button type="submit" class="btn btn-secondary ml-3">Submit</button>
+                            </div>
+                            {{ form_end(commentForm) }}
+                            <!-- END COMMENT FORM -->
+                        {% endif %}
                     </div>
-                    {{ form_end(commentForm) }}
-                    <!-- END COMMENT FORM -->
+                    <input
+                        type="button"
+                        class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
+                        value="Add a comment"
+                        onClick="$('.comment-sys').toggleClass('d-none')"
+                    >
                 {% endif %}
             </div>
-            <input
-                type="button"
-                class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
-                value="Add a comment"
-                onClick="$('.comment-sys').toggleClass('d-none')"
-            >
         {% endif %}
-    </div>
-{% endif %}
+    {% endif %}
+
+</div>

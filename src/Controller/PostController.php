@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -17,10 +18,12 @@ class PostController extends AbstractController
 {
 
     private $security;
+    private $postRepository;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, PostRepository $postRepository )
     {
         $this->security = $security;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -84,5 +87,33 @@ class PostController extends AbstractController
             'userLoggedIn' => $user
 
         ]);
+    }
+
+    /**
+     * @Route("/posts/deleteAction/ajaxAction", name="deleteAction")
+     */
+    public function deleteAction(Request $request){
+        $res = new Response();
+        $id = $request->request->get('id');
+
+        $post = $this->postRepository->findOneById($id);
+
+        if ($post == null) {
+            $res->setStatusCode(404);
+            return $res;
+        }
+
+        $manager = $this->getDoctrine()->getManager();
+        foreach ($post->getVotes() as $vote)
+            $manager->remove($vote);
+        foreach ($post->getComments() as $com)
+            $manager->remove($com);    
+        $manager->remove($post);
+        $manager->flush();
+
+        $res->setStatusCode(204);
+        $res->headers->set('Content-Type', 'application/json');
+        return $res;
+
     }
 }

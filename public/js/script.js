@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     $(".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled").click(function () {
         console.log("clic");
         var self = $(this);
@@ -17,7 +18,7 @@ $(document).ready(function(){
             },
             async: true,
             success: function(data) {
-                self.parent().children("span").html(data.nbVote);
+                self.parent().children(".nb-vote").html(data.nbVote);
                 if(type == "up-vote"){
                     self.attr("src","/img/up-arrow-orange.png");
                     self.parent().children(".up-vote").attr("class","up-vote-toggled");
@@ -33,22 +34,39 @@ $(document).ready(function(){
         })
     });
 
-    $(document).ready(function() {
-        //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-        $('.modal-trigger').click(function () {
-        //On initialise les modales materialize
-            $('.modal').modal();
-            //On récupère l'url depuis la propriété "Data-target" de la balise html a
-            url = $(this).attr('data-target');
-            //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
-            $.get(url, function (data) {
-                //on injecte le html dans la modale
-                $('.modal-content').html(data);
-                //on ouvre la modale
-                $('#modal1').modal('show');
-            });
-        })
+    //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
+    $('.modal-trigger').click(function () {
+    //On initialise les modales materialize
+        $('.modal').modal();
+        //On récupère l'url depuis la propriété "Data-target" de la balise html a
+        url = $(this).attr('data-target');
+        //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
+        $.get(url, function (data) {
+            //on injecte le html dans la modale
+            $('.modal-content').html(data);
+            //on ouvre la modale
+            $('#modal1').modal('show');
+        });
     });
 
+    $(".delete-post").click(function () {
+        console.log("deleting post " + $(this).data("id"));
+        var self = $(this);
+        var id = self.data("id");
+
+        $.ajax({
+            type: "POST",
+            url: '/posts/deleteAction/ajaxAction',
+            dataType: "json",
+            data: {
+                "id": id
+            },
+            async: true,
+            success: function(data) {
+                console.log(data);
+                self.parent().remove();
+            }
+        })
+    });
 
 });
