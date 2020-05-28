@@ -1,7 +1,6 @@
-<div class="post" >
-
+<div class="post border border-white" >
     {% if routeName == "profile" %}
-        <a class="close delete-post" title="Delete" data-id="{{ post.getId() }}">
+        <a class="close delete-post m-2" data-toggle="tooltip" data-placement="left" title="Delete ?" data-id="{{ post.getId() }}">
             <img src="{{ absolute_url(asset('img/trash.svg')) }}" width="25" />
         </a>
     {% endif %}
@@ -46,7 +45,7 @@
             </h2>
             <div class="lead post-meta">
                 Posted 
-                {% if routeName != "users" and routeName != "profile" %}
+                {% if routeName not in "users profile" %}
                         by
                     {% if userLoggedIn != post.user %}
                         <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
@@ -59,7 +58,7 @@
         </div>
     </div>
 
-    {% if routeName != "home" and routeName != "search" %}
+    {% if routeName not in "home search" %}
         <!-- CONTENT -->
         <div class="d-flex flex-column align-items-center mb-4">
 

@@ -16,12 +16,12 @@
 
     <!-- Content -->
     <div class="container">
-        {% if userLoggedIn.posts|length %}
+        {% if userVisited.posts|length %}
             <h2 class="">Posts</h2>
             <hr>
             <div class="mx-4">
                 {% for post in userVisited.posts %}
-                    {% include "post/post.html.twig" with {'routeName':'profile'} %}
+                    {% include "post/post.html.twig" %}
                 {% endfor %}
             </div>
         {% endif %}

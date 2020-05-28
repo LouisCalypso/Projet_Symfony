@@ -36,18 +36,39 @@ $(document).ready(function(){
 
     //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
     $('.modal-trigger').click(function () {
-    //On initialise les modales materialize
-        $('.modal').modal();
         //On récupère l'url depuis la propriété "Data-target" de la balise html a
         url = $(this).attr('data-target');
+
+        //On initialise les modales materialize
+        $(".modal").modal();
+        $('.modal-content').html(
+            '<div class="w-100 text-center">'
+                + '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">'
+                    + '<span class="sr-only">Loading...</span>'
+                + '</div>'
+            + '</div>'
+        );
+
         //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
         $.get(url, function (data) {
             //on injecte le html dans la modale
             $('.modal-content').html(data);
             //on ouvre la modale
-            $('#modal1').modal('show');
+            //$(modal).modal('show');
         });
     });
+
+    $(".btn-panel").hover(
+        function() {  $(this).children(".btn-panel-collapse").collapse('show'); },
+        function() { $(this).children(".btn-panel-collapse").collapse('hide'); }
+    );
+
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').parent().css("transition","ease .5s");
+    $('[data-toggle="tooltip"]').hover(
+        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); },
+        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); }
+    );
 
     $(".delete-post").click(function () {
         console.log("deleting post " + $(this).data("id"));

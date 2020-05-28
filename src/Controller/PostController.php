@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\PostType;
 use App\Form\CommentType;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,13 +85,42 @@ class PostController extends AbstractController
             'routeName' => 'post',
             'post' => $post,
             'commentForm' => $commentForm->createView(),
-            'userLoggedIn' => $user
-
         ]);
     }
 
     /**
-     * @Route("/posts/deleteAction/ajaxAction", name="deleteAction")
+     * @Route("/post/createAction", name="post/create")
+     */
+    public function createAction(Request $request)
+    {
+        $type = $request->query->get('type');
+        $user = $this->getUser();
+
+        $postForm = $this->createForm(PostType::class, null, ['type' => $type]);
+        $postForm->handleRequest($request);
+        if ($postForm->isSubmitted() && $postForm->isValid()) {
+            // on récupère l'objet Comment créé par le formulaire
+            $post = $postForm->getData();
+            $post
+                ->setNbVotes(0)
+                ->setCreatedAt(new \DateTime())
+                ->setUser($user);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($post);
+            $manager->flush();
+            return $this->redirectToRoute('post', ['id' => $post->getId()]);
+        }
+
+        return $this->render('post/creation.html.twig', [
+            'userLoggedIn' => $user,
+            'routeName' => 'post/create',
+            'postForm' => $postForm->createView(),
+            'formType' => $type,
+        ]);
+    }
+
+    /**
+     * @Route("/posts/deleteAction/ajaxAction", name="post/delete")
      */
     public function deleteAction(Request $request){
         $res = new Response();

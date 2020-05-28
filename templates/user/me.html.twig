@@ -18,7 +18,7 @@
             <hr>
             <div class="mx-4">
                 {% for post in userLoggedIn.posts %}
-                    {% include "post/post.html.twig" with {'routeName':'profile'} %}
+                    {% include "post/post.html.twig" %}
                 {% endfor %}
             </div>
         {% endif %}
