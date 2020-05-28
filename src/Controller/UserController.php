@@ -53,7 +53,7 @@ class UserController extends AbstractController
 
         return $this->render('user/him.html.twig',[
             'userLoggedIn' => $userLoggedIn,
-            'routeName' => 'post',
+            'routeName' => 'users',
             'userVisited'=> $userVisited
         ]);
     }
