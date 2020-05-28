@@ -54,13 +54,13 @@ class RegisterController extends AbstractController
             $manager->flush();
 
             // Mail de confirmation d'inscritpion
-            $email = (new Email())
+            /*$email = (new Email())
                 ->from('inscription@symfodoggos.com')
                 ->to($userFormType->getData()->getEmail()) //->to('louis.duretete@gmail.com')
                 ->subject('Bienvenue sur SymfoDoggos!')
                 ->html("<p>Nous vous confirmons l'inscritpion sur symfodoggos.com !</p><p>http://localhost:8080/</p>");
 
-            $mailer->send($email);
+            $mailer->send($email);*/
 
             // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
             // à nouveau le formulaire

@@ -7,9 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ * fields={"email"},
+ * errorPath="email",
+ * message="It appears you have already registered with this email."
+ *)
+ * @UniqueEntity(
+ * fields={"username"},
+ * errorPath="username",
+ * message="This username already exists."
+ *)
  */
 class User implements UserInterface
 {
@@ -25,7 +36,7 @@ class User implements UserInterface
      *
      * @Assert\Email()
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="json")
@@ -50,12 +61,12 @@ class User implements UserInterface
     private $posts;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      *
      * @Assert\Length(min=6,max=20)
      *
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(type="datetime")

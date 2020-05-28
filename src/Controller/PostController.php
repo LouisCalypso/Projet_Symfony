@@ -64,7 +64,7 @@ class PostController extends AbstractController
             $manager->flush();
 
             //S'il ne s'agit pas du propriétaire du poste qui commente son poste
-            if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
+            /*if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
                 // Mail de confirmation d'inscritpion
                $email = (new Email())
                     ->from('ig2i@symfodoggos.com')
@@ -73,7 +73,7 @@ class PostController extends AbstractController
                     ->html("<p>".$this->getUser()->getUsername()." a commenté votre poste : <b>".$post->getTitle()." </b>!</p>
                                     <p>Vous pouvez voir ce qu'il/elle a dit avec ce lien : http://localhost:8080/posts/".$post->getId()."</p>");
                 $mailer->send($email);
-            }
+            }*/
 
             // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
             // à nouveau le formulaire
