@@ -28,7 +28,7 @@
                 <img class="down-vote-toggled d-inline" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
             {% endif %}
         {% else %}
-            {{ post.getNbVotes() }}
+            <h4 class="d-inline" style="color:red;">{{ post.getNbVotes() }}</h4>
         {% endif %}
         </div>
         <!-- END VOTE SYSTEM -->
