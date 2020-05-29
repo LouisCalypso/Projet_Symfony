@@ -4,9 +4,16 @@ $(document).ready(function(){
         console.log("clic");
         var self = $(this);
         var id = self.data("id");
-        var type = self.attr('class');
-        if(type == "up-vote-toggled" || type == "down-vote-toggled")
-            return ;
+
+        switch(true) {
+            case self.hasClass("up-vote") :
+                var type = "up-vote";
+                break;
+            case self.hasClass("down-vote") :
+                var type = "down-vote";
+                break;
+            default: return;
+        }
 
         $.ajax({
             type: "POST",
@@ -21,13 +28,13 @@ $(document).ready(function(){
                 self.parent().children(".nb-vote").html(data.nbVote);
                 if(type == "up-vote"){
                     self.attr("src","/img/up-arrow-orange.png");
-                    self.parent().children(".up-vote").attr("class","up-vote-toggled");
-                    self.parent().children(".down-vote-toggled").attr("class","down-vote");
+                    self.parent().children(".up-vote").toggleClass(["up-vote","up-vote-toggled"]);
+                    self.parent().children(".down-vote-toggled").toggleClass(["down-vote-toggled","down-vote"]);
                     self.parent().children(".down-vote").attr("src","/img/down-arrow.png");
                 }else{
                     self.attr("src","/img/down-arrow-blue.png");
-                    self.parent().children(".down-vote").attr("class","down-vote-toggled");
-                    self.parent().children(".up-vote-toggled").attr("class","up-vote");
+                    self.parent().children(".down-vote").toggleClass(["down-vote","down-vote-toggled"]);
+                    self.parent().children(".up-vote-toggled").toggleClass(["up-vote-toggled","up-vote"]);
                     self.parent().children(".up-vote").attr("src","/img/up-arrow.png");
                 }
             }
@@ -64,17 +71,17 @@ $(document).ready(function(){
     );
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="tooltip"]').parent().css("transition","ease .5s");
+    $('[data-toggle="tooltip"]').parents('.post').css("transition","ease .5s");
     $('[data-toggle="tooltip"]').hover(
-        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); },
-        function() {  $(this).parent().toggleClass(['border-danger', 'border-white', 'shadow']); }
+        function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); },
+        function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); }
     );
 
     $(".delete-post").click(function () {
-        console.log("deleting post " + $(this).data("id"));
         var self = $(this);
         var id = self.data("id");
-
+        
+        console.log("deleting post " + $(this).data("id"));
         $.ajax({
             type: "POST",
             url: '/posts/deleteAction/ajaxAction',
@@ -84,8 +91,9 @@ $(document).ready(function(){
             },
             async: true,
             success: function(data) {
-                console.log(data);
-                self.parent().remove();
+                if (self.parents('.post-list').children().length == 1)
+                    self.parents('.container').remove();
+                else self.parents('.post').remove();
             }
         })
     });

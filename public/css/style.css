@@ -9,3 +9,12 @@
 a:hover {
     text-decoration: none;
 }
+
+figure {
+    display: block;
+    width: 40%;
+    height: 40vh;
+    background-position: center;
+    background-size: cover;
+    margin:0;
+}
