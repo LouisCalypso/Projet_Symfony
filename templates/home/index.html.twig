@@ -14,7 +14,7 @@
 {% include "layout/sort.html.twig" %}
     <div class="container col-7">
         {% for post in posts %}
-            {% include "post/post.html.twig" %}
+            {% include "post/preview.html.twig" %}
         {% endfor %}
 
         {% if pagination.nbPages > 0 %}

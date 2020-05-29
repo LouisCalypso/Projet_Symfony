@@ -16,9 +16,9 @@
         {% if userLoggedIn.posts|length %}
             <h2 class="">Posts</h2>
             <hr>
-            <div class="mx-4">
+            <div class="post-list mx-4">
                 {% for post in userLoggedIn.posts %}
-                    {% include "post/post.html.twig" %}
+                    {% include "post/preview.html.twig" %}
                 {% endfor %}
             </div>
         {% endif %}
