@@ -45,6 +45,33 @@ class PostRepository extends ServiceEntityRepository
         return $paginator;
     }
 
+    /**
+     * @desc Order posts by date or by vote, using pagination
+     * @param $page
+     * @param $count
+     * @param $type
+     * @return Paginator
+     */
+    public function findAllPagineSorted($page, $count, $type) {
+        $orderQuery = '';
+        if($type == "newest-posts") {
+            $orderQuery ='post.createdAt DESC';
+        } else {
+            $orderQuery = 'post.nbVotes DESC, post.createdAt DESC';
+        }
+
+        $qb = $this->createQueryBuilder('post')
+            ->add('orderBy', $orderQuery);
+
+        $query = $qb->getQuery();
+
+        $premierResultat = ($page - 1) * $count;
+        $query->setFirstResult($premierResultat)->setMaxResults($count);
+        $paginator = new Paginator($query);
+
+        return $paginator;
+    }
+
     public function findOneById($value): ?Post
     {
         return $this->createQueryBuilder('post')

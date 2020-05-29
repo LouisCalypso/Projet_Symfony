@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ class HomeController extends AbstractController
         if ($page < 1 ) $page = 1;
         
         $user = $this->security->getUser();
-        $posts = $this->postRepository->findAllPagine($page, 3, $user); // ici mais on peut mettre autre chose (3 par page là)
+        $posts = $this->postRepository->findAllPagine($page, 3); // ici mais on peut mettre autre chose (3 par page là)
         $pagination = array(
             'page' => $page,
             'nbPages' => ceil(count($posts) / 3), // ne pas oublier de changer ce 3 aussi
@@ -90,6 +91,46 @@ class HomeController extends AbstractController
         )));
         $response->headers->set('Content-Type', 'application/json');
 
+        return $response;
+
+    }
+
+    /**
+     * @Route("/home/sortAction/ajaxAction", name="sortAction")
+     */
+    public function sortAction(Request $request) {
+
+        $route = $request->request->get('_route');
+        $type =   $request->request->get('type');
+        $user = $this->security->getUser();
+        $posts = $this->postRepository->findAllPagineSorted(1, 3, $type);
+
+        $pagination = array(
+            'page' => 1,
+            'nbPages' => ceil(count($posts) / 3), // ne pas oublier de changer ce 3 aussi
+            'nomRoute' => 'home',
+            'paramsRoute' => array()
+        );
+        /*$response = array(
+            "code" => 200,
+            "response" => $this->render('home/index.html.twig', [
+                'userLoggedIn' => $user,
+                'routeName' => 'home',
+                'posts' => $posts,
+                'pagination' => $pagination,
+            ]) );
+
+        return new JsonResponse($response);*/
+        $newRender =  $this->render('post/posts-list.html.twig', [
+            'userLoggedIn' => $user,
+            'routeName' => 'home',
+            'posts' => $posts,
+            'pagination' => $pagination,
+        ])->getContent();
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent(json_encode($newRender));
         return $response;
 
     }

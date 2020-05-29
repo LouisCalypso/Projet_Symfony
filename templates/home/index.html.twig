@@ -12,29 +12,8 @@
     <!-- Main Content -->
 
 {% include "layout/sort.html.twig" %}
-    <div class="container col-7">
-        {% for post in posts %}
-            {% include "post/preview.html.twig" %}
-        {% endfor %}
+    {% include "post/posts-list.html.twig" %}
 
-        {% if pagination.nbPages > 0 %}
-            <div class="clearfix">
-                {% if pagination.page > 1 %}
-                    <a class="clearfix btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                        pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
-                        Newer posts
-                    </a>
-                {% endif %}
-
-                {% if pagination.page < pagination.nbPages %}
-                    <a class="clearfix btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                        pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
-                        Older posts
-                    </a>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
 {% endblock %}
 
 

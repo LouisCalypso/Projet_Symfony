@@ -41,16 +41,55 @@ $(document).ready(function(){
         })
     });
 
-    //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-    $(".newest-posts, .best-posts").click(function () {
+    //On écoute le clic sur les boutons newest et top
+    $(".sort-trigger").click(function () {
         console.log("clic");
         var self = $(this);
-        var type = self.attr('class');
+        var type = self.data('category');
         console.log(type);
-        console.log(self.data('posts'))
+
+        $.ajax({
+            type: "POST",
+            url: '/home/sortAction/ajaxAction',
+            dataType: "json",
+            data: {
+                "type": type
+            },
+            async: true,
+            success: function(data) {
+                console.log("SUCCESS");
+                console.log(data);
+                $('.posts-list').html(data);
+
+               // self.parent().children(".nb-vote").html(data.nbVote);
+            }
+        })
 
     });
 
+    //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
+    $('.modal-trigger').click(function () {
+        //On récupère l'url depuis la propriété "Data-target" de la balise html a
+        url = $(this).attr('data-target');
+
+        //On initialise les modales materialize
+        $(".modal").modal();
+        $('.modal-content').html(
+            '<div class="w-100 text-center">'
+            + '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">'
+            + '<span class="sr-only">Loading...</span>'
+            + '</div>'
+            + '</div>'
+        );
+
+        //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
+        $.get(url, function (data) {
+            //on injecte le html dans la modale
+            $('.modal-content').html(data);
+            //on ouvre la modale
+            //$(modal).modal('show');
+        });
+    });
 
 
     $(".btn-panel").hover(

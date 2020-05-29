@@ -29,10 +29,17 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         
         $user = $this->userRepository->find($user->getId());
-            
+        $pagination = array(
+            'page' => 1,
+            'nbPages' => ceil(count($user->getPosts()) / 3), // ne pas oublier de changer ce 3 aussi
+            'nomRoute' => 'profile',
+            'paramsRoute' => array()
+        );
+
         return $this->render('user/me.html.twig',[
             'userLoggedIn' => $user,
             'routeName' => 'profile',
+            'pagination' => $pagination
         ]);
     }
     
