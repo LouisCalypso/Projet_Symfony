@@ -5,19 +5,27 @@
         {% include "post/preview.html.twig" %}
     {% endfor %}
 
+
+        <select id="articles-per-pages" data-category="{{ sortType }}" data-page={{ pagination.page }}>
+            <option value=3 {% if postsPerPage == 3 %} selected="selected"{% endif %} >3</option>
+            <option value=5 {% if postsPerPage == 5 %} selected="selected"{% endif %} >5</option>
+            <option value=10 {% if postsPerPage == 10 %} selected="selected"{% endif %} >10</option>
+            <option value=20 {% if postsPerPage == 20 %} selected="selected"{% endif %}>20</option>
+        </select>
     {% if pagination.nbPages > 0 %}
         <div class="clearfix">
             {% if pagination.page > 1 %}
                 <a class="clearfix btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                    pagination.paramsRoute|merge({'page': pagination.page-1})) }}">
+                    pagination.paramsRoute|merge({'page': pagination.page-1, "postsPerPage": postsPerPage})) }}">
                     Newer posts
                 </a>
             {% endif %}
 
             {% if pagination.page < pagination.nbPages %}
+
                 <a class="clearfix btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                    pagination.paramsRoute|merge({'page': pagination.page+1})) }}">
-                    Other posts
+                    pagination.paramsRoute|merge({'page': pagination.page+1, "postsPerPage": postsPerPage})) }}">
+                    More posts
                 </a>
             {% endif %}
         </div>

@@ -65,8 +65,8 @@ class PostRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
 
-        $premierResultat = ($page - 1) * $count;
-        $query->setFirstResult($premierResultat)->setMaxResults($count);
+        $firstResult = ($page - 1) * $count;
+        $query->setFirstResult($firstResult)->setMaxResults($count);
         $paginator = new Paginator($query);
 
         return $paginator;

@@ -45,27 +45,55 @@ $(document).ready(function(){
     $(".sort-trigger").click(function () {
         console.log("clic");
         var self = $(this);
+        var postsPerPage = $('#articles-per-pages option:selected').val();
         var type = self.data('category');
-        console.log(type);
+        var page = self.data('page');
+
 
         $.ajax({
             type: "POST",
-            url: '/home/sortAction/ajaxAction',
+            url: '/home/updateAction/ajaxAction',
             dataType: "json",
             data: {
-                "type": type
+                "postsPerPage": postsPerPage,
+                "type": type,
+                "page": page
             },
             async: true,
             success: function(data) {
                 console.log("SUCCESS");
-                console.log(data);
                 $('.posts-list').html(data);
-
-               // self.parent().children(".nb-vote").html(data.nbVote);
             }
         })
 
     });
+
+    $("#articles-per-pages").change(function(){
+        var self = $(this);
+        var postsPerPage = $('#articles-per-pages option:selected').val();
+        alert(postsPerPage);
+        var type = self.data('category');
+        var page =  self.data('page');
+        $.ajax({
+            type: "POST",
+            url: '/home/updateAction/ajaxAction',
+            dataType: "json",
+            data: {
+                "postsPerPage": parseInt(postsPerPage),
+                "type": type,
+                "page": parseInt(page)
+
+
+            },
+            async: true,
+            success: function(data) {
+                console.log("SUCCESS");
+                $('.posts-list').html(data);
+            }
+        })
+    })
+
+
 
     //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
     $('.modal-trigger').click(function () {

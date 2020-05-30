@@ -16,11 +16,13 @@ class HomeController extends AbstractController
     
     private $postRepository;
     private $security;
+    private $nbPostsPerPages;
     
     public function __construct(PostRepository $postRepository, Security $security)
     {
         $this->postRepository = $postRepository;
         $this->security = $security;
+        $this->nbPostsPerPages = 3;
     }
     
     /**
@@ -29,22 +31,27 @@ class HomeController extends AbstractController
      */
     public function index(int $page = 1)
     {
+
         if ($page < 1 ) $page = 1;
-        
+
         $user = $this->security->getUser();
-        $posts = $this->postRepository->findAllPagine($page, 3); // ici mais on peut mettre autre chose (3 par page là)
+        $posts = $this->postRepository->findAllPagine($page, $this->nbPostsPerPages);
         $pagination = array(
             'page' => $page,
-            'nbPages' => ceil(count($posts) / 3), // ne pas oublier de changer ce 3 aussi
+            'nbPages' => ceil(count($posts) / $this->nbPostsPerPages),
             'nomRoute' => 'home',
-            'paramsRoute' => array()
+            'paramsRoute' => array(),
+
         );
         
         return $this->render('home/index.html.twig', [
             'userLoggedIn' => $user,
             'routeName' => 'home',
+            'sortType' => "best-posts",
             'posts' => $posts,
             'pagination' => $pagination,
+            'postsPerPage' => $this->nbPostsPerPages
+
         ]);
     }
 
@@ -95,43 +102,47 @@ class HomeController extends AbstractController
 
     }
 
-    /**
-     * @Route("/home/sortAction/ajaxAction", name="sortAction")
-     */
-    public function sortAction(Request $request) {
 
-        $route = $request->request->get('_route');
-        $type =   $request->request->get('type');
+    /**
+     * @Route("/home/updateAction/ajaxAction", name="updateAction")
+     */
+    public function updatePostsList(Request $request) {
         $user = $this->security->getUser();
-        $posts = $this->postRepository->findAllPagineSorted(1, 3, $type);
+
+        $page = (int) $request->request->get('page');
+        $postsPerPage = abs((int) $request->request->get('postsPerPage'));
+        $type =   $request->request->get('type');
+
+        $this->nbPostsPerPages = $postsPerPage;
+        if($postsPerPage != null) {
+            $this->nbPostsPerPages = $postsPerPage;
+        } else {
+            $postsPerPage = $this->nbPostsPerPages;
+
+        }
+        $posts = $this->postRepository->findAllPagineSorted($page, $postsPerPage, $type);
 
         $pagination = array(
-            'page' => 1,
-            'nbPages' => ceil(count($posts) / 3), // ne pas oublier de changer ce 3 aussi
+            'page' => $page,
+            'nbPages' => ceil(count($posts) / $postsPerPage),
             'nomRoute' => 'home',
-            'paramsRoute' => array()
-        );
-        /*$response = array(
-            "code" => 200,
-            "response" => $this->render('home/index.html.twig', [
-                'userLoggedIn' => $user,
-                'routeName' => 'home',
-                'posts' => $posts,
-                'pagination' => $pagination,
-            ]) );
+            'paramsRoute' => array(),
 
-        return new JsonResponse($response);*/
+        );
+
         $newRender =  $this->render('post/posts-list.html.twig', [
             'userLoggedIn' => $user,
+            'sortType' => $type,
             'routeName' => 'home',
             'posts' => $posts,
             'pagination' => $pagination,
+            'postsPerPage' => $postsPerPage
+
         ])->getContent();
 
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $response->setContent(json_encode($newRender));
         return $response;
-
     }
 }
