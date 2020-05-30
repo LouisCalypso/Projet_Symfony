@@ -1,0 +1,20 @@
+<div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="display-4">Post your Doggo !</h4>
+</div>
+<div class="modal-body clearfix">
+    {% form_theme postForm 'bootstrap_4_horizontal_layout.html.twig' %}
+    {{ form_start(postForm, {'action': url('post/create', {'type': formType})}) }}
+        {{ form_row(postForm.title) }}
+        {% if formType == 'text' %}
+            {{ form_row(postForm.body) }}
+        {% elseif formType == 'link' %}
+            {{ form_row(postForm.link) }}
+        {% elseif formType == 'image' %}
+            {{ form_row(postForm.imageFile) }}
+        {% endif %}
+        <button type="submit" class="btn btn-secondary float-right">It's a good boy !</button>
+    {{ form_end(postForm) }}
+</div>

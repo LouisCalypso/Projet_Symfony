@@ -1,0 +1,39 @@
+{% if userLoggedIn %}
+    <div class="btn-panel p-1 clearfix" style="position: fixed; right: 5%; bottom: 10%;">
+        <div class="btn-panel-collapse collapse" style="padding-bottom: 40px; margin-bottom: 40px;">
+            <a
+                data-target="{{ url('post/create', {'type':'link'}) }}"
+                class="mb-3 modal-trigger d-flex bg-warning rounded-circle border-0 align-items-center justify-content-center overflow-hidden shadow"
+                style="width: 80px; height: 80px;"
+                href="#write"
+            >
+                <img src="{{ asset("/img/link.svg") }}" width="50%" />
+            </a>
+            <a
+                data-target="{{ url('post/create', {'type':'text'}) }}"
+                class="mb-3 modal-trigger d-flex bg-dark rounded-circle border-0 align-items-center justify-content-center overflow-hidden shadow"
+                style="width: 80px; height: 80px;"
+                href="#write"
+            >
+                <img src="{{ asset("/img/quote.svg") }}" width="50%" />
+            </a>
+        </div>
+        <a
+            data-target="{{ url('post/create', {'type':'image'}) }}"
+            class="modal-trigger d-flex bg-primary rounded-circle border-0 align-items-center justify-content-center overflow-hidden shadow"
+            style="position: absolute; bottom: 5px; right: 5px; width: 80px; height: 80px;"
+            href="#write"
+        >
+            <img
+                src="{{ asset("/img/doggo.ico") }}"
+                width="70%"
+            />
+        </a>
+    </div>
+
+    <div id="write" class="modal" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content p-5 "></div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,24 @@
+.up-vote, .down-vote {
+    cursor: pointer;
+}
+
+.up-vote-toggled, .down-vote-toggled {
+    cursor: not-allowed;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+figure {
+    display: block;
+    position: relative;
+    width: 40%;
+    height: 35vh;
+    overflow: hidden;
+    margin:0;
+}
+
+figure img {
+    position: absolute;
+}

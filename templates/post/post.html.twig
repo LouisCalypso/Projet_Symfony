@@ -1,0 +1,112 @@
+<div class="post border border-white" >
+
+    <!-- HEAD -->
+    <div class="mb-4">
+        <div class="card-body text-center">
+            <!-- VOTE SYSTEM -->
+            <h4 style="color:red;">
+            {% if userLoggedIn %}
+                {% set upvotePossible = 1 %}
+                {% set downvotePossible = 1 %}
+                {% for vote in post.votes %}
+                    {% if vote.getUser().id == userLoggedIn.id %}
+                        {% if vote.type %}
+                            {% set upvotePossible = 0 %}
+                        {% else %}
+                            {% set downvotePossible = 0 %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if upvotePossible %}
+                    <img class="up-vote" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% else %}
+                    <img class="up-vote-toggled" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% endif %}
+                <span class="nb-vote" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</span>
+                {% if downvotePossible %}
+                    <img class="down-vote" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% else %}
+                    <img class="down-vote-toggled" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+                {% endif %}
+            {% else %}
+                {{ post.getNbVotes() }}
+            {% endif %}
+            </h4>
+            <!-- END VOTE SYSTEM -->
+            <h2 class="display-4 post-title">
+                <a href="{{ url('post',{'id': post.id}) }}">
+                    {{ post.getTitle() }}
+                </a>
+            </h2>
+            <div class="lead post-meta">
+                Posted by
+                    {% if userLoggedIn != post.user %}
+                        <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
+                    {% else %}
+                        you
+                    {% endif %}
+                on {{ post.getCreatedAt()|date('d/m/Y \\a\\t H:i') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="d-flex flex-column align-items-center mb-4">
+
+        {% if post.getImage() %}
+            <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="w-50 rounded mb-4" alt="Post image" width="200">
+        {% endif %}
+
+        {% if post.body %}
+            <div class="bg-light rounded blockquote p-4 w-100 shadow-sm mb-4">
+                <p> {{ post.body|raw }} </p>
+            </div>
+        {% endif %}
+
+        {% if post.link %}
+            <a 
+                class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold mb-4" 
+                href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
+            >
+                {{ post.link }}
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- COMMENTS -->
+    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
+                <li class="list-group-item">
+                    <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
+                    - {{ comment.createdAt|date("d/m/Y \\a\\t H:i") }}
+                    <p> {{ comment.body|raw }} </p>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- COMMENT SYSTEM -->
+        {% if userLoggedIn %}
+            {% if userLoggedIn %}
+                <div class="card-footer d-none comment-sys p-0">
+                    <!-- COMMENT FORM -->
+                    {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
+                    <div>
+                        <button type="submit" class="float-right btn btn-secondary px-3 py-2 rounded-0">Send</button>
+                        {{ form_widget(commentForm.body) }}
+                    </div>
+                    {{ form_end(commentForm) }}
+                    <!-- END COMMENT FORM -->
+                </div>
+            {% endif %}
+            <input
+                type="button"
+                class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
+                value="Add a comment"
+                onClick="$('.comment-sys').toggleClass('d-none')"
+            >
+        {% endif %}
+    </div>
+
+</div>

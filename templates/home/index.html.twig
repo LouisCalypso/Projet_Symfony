@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- Page Header -->
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <h1>SymfoDoggos</h1>
+            <span class="subheading">Who is a good boi ?</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        {% include "post/posts-list.html.twig" %}
+    </div>
+
+{% endblock %}
+
+

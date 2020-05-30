@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            {% if userLoggedIn %}
+                <h3>You are logged in as {{ userLoggedIn.username }}, <a href="{{ path('app_logout') }}">Logout</a> ?</h3>
+            {% else %}
+                <h1>Please sign up</h1>
+                <span class="subheading">Tell us about you</span>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if not userLoggedIn %}
+        <div class="container col-7">
+            {% form_theme userFormType 'bootstrap_4_horizontal_layout.html.twig' %}
+            {{ form_start(userFormType) }}
+            {{ form_row(userFormType.email) }}
+            {{ form_row(userFormType.username) }}
+            {{ form_row(userFormType.password ) }}
+            <div class="d-flex p-3 flex-row justify-content-between align-items-center">
+                <div>
+                    Already got an account ?
+                    <a href="{{ url('app_login') }}">Sign in !</a>
+                </div>
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Sign up
+                </button>
+            </div>
+            {{ form_end(userFormType) }}
+        </div>
+    {% endif %}
+{% endblock %}

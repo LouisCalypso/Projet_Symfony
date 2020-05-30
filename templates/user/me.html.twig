@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ userLoggedIn.username }}{% endblock %}
+
+{% block body %}
+    <!-- Page Header -->
+    <header class="container masthead p-5 mb-3">
+        <div class="site-heading text-center">
+            <span class="subheading">Joined on {{ userLoggedIn.createdAt|date('d/m/Y \\a\\t H:i') }}</span>
+            <h1>{{ userLoggedIn.username }}</h1>
+        </div>
+    </header>
+
+    <!-- Content -->
+    {% if userLoggedIn.posts|length %}
+        <div class="container">
+            <h2 >Posts</h2>
+            <hr>
+            {% include "post/posts-list.html.twig" with { posts: userLoggedIn.posts } %}
+        </div>
+    {% endif %}
+{% endblock %}
