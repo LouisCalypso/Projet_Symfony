@@ -29,16 +29,16 @@ class HomeController extends AbstractController
      * @Route("/", name="root")
      * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
-    public function index(int $page = 1)
+    public function index(Request $request, $page = 1)
     {
 
         if ($page < 1 ) $page = 1;
-
         $user = $this->security->getUser();
-        $posts = $this->postRepository->findAllPagine($page, $this->nbPostsPerPages);
+        $postsPerPage = $request->query->get('postsPerPage') ? $request->query->get('postsPerPage') : 3;
+        $posts = $this->postRepository->findAllPagine($page, $postsPerPage);
         $pagination = array(
             'page' => $page,
-            'nbPages' => ceil(count($posts) / $this->nbPostsPerPages),
+            'nbPages' => ceil(count($posts) / $postsPerPage),
             'nomRoute' => 'home',
             'paramsRoute' => array(),
 
@@ -50,7 +50,7 @@ class HomeController extends AbstractController
             'sortType' => "best-posts",
             'posts' => $posts,
             'pagination' => $pagination,
-            'postsPerPage' => $this->nbPostsPerPages
+            'postsPerPage' => $postsPerPage
 
         ]);
     }

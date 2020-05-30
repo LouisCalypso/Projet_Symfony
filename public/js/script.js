@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
-    $(".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled").click(function () {
-        console.log("clic");
+    $(document).on('click',".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled",function () {
         var self = $(this);
         var id = self.data("id");
 
@@ -42,13 +41,12 @@ $(document).ready(function(){
     });
 
     //On écoute le clic sur les boutons newest et top
-    $(".sort-trigger").click(function () {
-        console.log("clic");
+    $(document).on('click',".sort-trigger", function () {
         var self = $(this);
         var postsPerPage = $('#articles-per-pages option:selected').val();
         var type = self.data('category');
         var page = self.data('page');
-
+        console.log('posts', postsPerPage, page);
 
         $.ajax({
             type: "POST",
@@ -68,11 +66,10 @@ $(document).ready(function(){
 
     });
 
-    $("#articles-per-pages").change(function(){
+    $(document).on('change',"#articles-per-pages",function(){
         var self = $(this);
         var postsPerPage = $('#articles-per-pages option:selected').val();
-        alert(postsPerPage);
-        var type = self.data('category');
+        var type = 'best-posts';
         var page =  self.data('page');
         $.ajax({
             type: "POST",
@@ -96,7 +93,7 @@ $(document).ready(function(){
 
 
     //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-    $('.modal-trigger').click(function () {
+    $(document).on('click','.modal-trigger',function () {
         //On récupère l'url depuis la propriété "Data-target" de la balise html a
         url = $(this).attr('data-target');
 
