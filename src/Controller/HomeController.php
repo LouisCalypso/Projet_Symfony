@@ -11,6 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Vote;
 use Symfony\Component\Security\Core\Security;
 
+
+/**
+ * Class HomeController
+ * Control the post-list and update it
+ * @package App\Controller
+ */
 class HomeController extends AbstractController
 {
     
@@ -26,6 +32,11 @@ class HomeController extends AbstractController
     }
     
     /**
+     * Initiate the posts list and render it following registered preferences
+     *  (by default : 3 posts per page, page 1, sorted by best posts)
+     * @param Request $request
+     * @param int $page
+     * @return Response
      * @Route("/", name="root")
      * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
@@ -58,6 +69,10 @@ class HomeController extends AbstractController
     }
 
     /**
+     * AJAX Action
+     * up or downvote a post from the posts-list
+     * @param Request $request
+     * @return Response
      * @Route("/home/voteAction/ajaxAction", name="voteAction")
      */
     public function voteAction(Request $request){
@@ -106,6 +121,9 @@ class HomeController extends AbstractController
 
 
     /**
+     *
+     * @param Request $request
+     * @return Response
      * @Route("/home/updateAction/ajaxAction", name="updateAction")
      */
     public function updatePostsList(Request $request) {

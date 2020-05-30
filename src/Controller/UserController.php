@@ -29,17 +29,13 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         
         $user = $this->userRepository->find($user->getId());
-        $pagination = array(
-            'page' => 1,
-            'nbPages' => ceil(count($user->getPosts()) / 3), // ne pas oublier de changer ce 3 aussi
-            'nomRoute' => 'profile',
-            'paramsRoute' => array()
-        );
 
         return $this->render('user/me.html.twig',[
+            'sortType' => 'older',
+            'postsPerPage' => 1,
+
             'userLoggedIn' => $user,
             'routeName' => 'profile',
-            'pagination' => $pagination
         ]);
     }
     
@@ -58,8 +54,11 @@ class UserController extends AbstractController
         if($userLoggedIn && $userLoggedIn->getId() == $id)
             return $this->me();
 
+
         return $this->render('user/him.html.twig',[
+            'sortType' => 'older',
             'userLoggedIn' => $userLoggedIn,
+            'postsPerPage' => 1,
             'routeName' => 'users',
             'userVisited'=> $userVisited
         ]);

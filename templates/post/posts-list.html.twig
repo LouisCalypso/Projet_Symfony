@@ -5,7 +5,7 @@
         {% include "post/preview.html.twig" %}
     {% endfor %}
 
-
+{% if pagination is defined %}
         <select id="articles-per-pages" data-category="{{ sortType }}" data-page={{ pagination.page }}>
             <option value=3 {% if postsPerPage == 3 %} selected="selected"{% endif %} >3</option>
             <option value=5 {% if postsPerPage == 5 %} selected="selected"{% endif %} >5</option>
@@ -30,5 +30,6 @@
             {% endif %}
         </div>
     {% endif %}
+        {% endif %}
 </div>
 </div>
