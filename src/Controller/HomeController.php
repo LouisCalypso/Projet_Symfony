@@ -35,7 +35,9 @@ class HomeController extends AbstractController
         if ($page < 1 ) $page = 1;
         $user = $this->security->getUser();
         $postsPerPage = $request->query->get('postsPerPage') ? $request->query->get('postsPerPage') : 3;
-        $posts = $this->postRepository->findAllPagine($page, $postsPerPage);
+        $sortType = $request->query->get('sortType') ? $request->query->get('sortType') : "best-posts";
+
+        $posts = $this->postRepository->findAllPagineSorted($page, $postsPerPage, $sortType);
         $pagination = array(
             'page' => $page,
             'nbPages' => ceil(count($posts) / $postsPerPage),
@@ -47,7 +49,7 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'userLoggedIn' => $user,
             'routeName' => 'home',
-            'sortType' => "best-posts",
+            'sortType' => $sortType,
             'posts' => $posts,
             'pagination' => $pagination,
             'postsPerPage' => $postsPerPage

@@ -46,6 +46,7 @@ $(document).ready(function(){
         var postsPerPage = $('#articles-per-pages option:selected').val();
         var type = self.data('category');
         var page = self.data('page');
+        console.log(page);
         console.log('posts', postsPerPage, page);
 
         $.ajax({
@@ -89,6 +90,7 @@ $(document).ready(function(){
             }
         })
     })
+
 
 
 
