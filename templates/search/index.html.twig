@@ -12,28 +12,30 @@
     </header>
 
     <!-- Main Content -->
-    <div class="container col-7">
+    <div class="container">
         {% for post in posts %}
             {% include "post/preview.html.twig" %}
         {% endfor %}
 
-        {% if pagination.nbPages > 0 %}
-            {% if pagination.page > 1 %}
-                <div class="clearfix">
-                    <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                        pagination.paramsRoute|merge({'page': pagination.page-1, 'q': query})) }}">
-                        Newer posts
-                    </a>
-                </div>
-            {% endif %}
+        {% if pagination is defined %}
+            {% if pagination.nbPages > 0 %}
+                {% if pagination.page > 1 %}
+                    <div class="clearfix">
+                        <a class="btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
+                            pagination.paramsRoute|merge({'page': pagination.page-1, 'q': query})) }}">
+                            Newer posts
+                        </a>
+                    </div>
+                {% endif %}
 
-            {% if pagination.page < pagination.nbPages %}
-                <div class="clearfix">
-                    <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                        pagination.paramsRoute|merge({'page': pagination.page+1, 'q': query})) }}">
-                        Older posts
-                    </a>
-                </div>
+                {% if pagination.page < pagination.nbPages %}
+                    <div class="clearfix">
+                        <a class="btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
+                            pagination.paramsRoute|merge({'page': pagination.page+1, 'q': query})) }}">
+                            Older posts
+                        </a>
+                    </div>
+                {% endif %}
             {% endif %}
         {% endif %}
     </div>

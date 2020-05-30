@@ -1,35 +1,74 @@
 <div class="posts-list">
-    <div class="container col-7">
-
-    {% for post in posts %}
-        {% include "post/preview.html.twig" %}
-    {% endfor %}
-
-{% if pagination is defined %}
-        <select id="posts-per-page" data-category="{{ sortType }}" data-page={{ pagination.page }}>
-            <option value=3 {% if postsPerPage == 3 %} selected="selected"{% endif %} >3</option>
-            <option value=5 {% if postsPerPage == 5 %} selected="selected"{% endif %} >5</option>
-            <option value=10 {% if postsPerPage == 10 %} selected="selected"{% endif %} >10</option>
-            <option value=20 {% if postsPerPage == 20 %} selected="selected"{% endif %}>20</option>
-        </select>
-    {% if pagination.nbPages > 0 %}
-        <div class="clearfix">
-            {% if pagination.page > 1 %}
-                <a class="clearfix btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
-                    pagination.paramsRoute|merge({'page': pagination.page-1,  "postsPerPage": postsPerPage, "sortType": sortType})) }}">
-                    Go Back
-                </a>
-            {% endif %}
-
-            {% if pagination.page < pagination.nbPages %}
-
-                <a class="clearfix btn btn-primary float-right"  href="{{ path(pagination.nomRoute,
-                    pagination.paramsRoute|merge({"postsPerPage": postsPerPage, 'page': pagination.page+1, "postsPerPage": postsPerPage, "sortType": sortType})) }}">
-                    More posts
-                </a>
-            {% endif %}
+    {% if routeName not in "users profile" %}
+        <div class="d-flex flex-row w-100 mb-4 justify-content-center">
+            <button 
+                class="sort-trigger mx-4 btn btn-lg btn{{ sortType != 'best-posts' ? '-outline' }}-warning" 
+                data-category="best-posts" 
+                data-postsPerPage="{{ postsPerPage }}" 
+                data-page="{{ pagination.page }}"
+            >
+                Top
+            </button>
+            <button 
+                class="sort-trigger mx-4 btn btn-lg btn{{ sortType != 'newest-posts' ? '-outline' }}-warning" 
+                data-category="newest-posts" 
+                data-postsPerPage="{{ postsPerPage }}" 
+                data-page="{{ pagination.page }}"
+            >
+                Newest
+            </button>
         </div>
     {% endif %}
+
+    <div class="content">
+        {% for post in posts %}
+            {% include "post/preview.html.twig" %}
+        {% endfor %}
+    </div>
+
+    {% if pagination is defined %}
+        {% if pagination.nbPages > 0 %}
+            <div class="d-flex flex-row w-100 align-items-center justify-content-between">
+                {% if pagination.page > 1 %}
+                    <a 
+                        class="btn btn-primary"
+                        href="{{ path(
+                            pagination.nomRoute,
+                            pagination.paramsRoute|merge({
+                                'page': pagination.page-1,
+                                "postsPerPage": postsPerPage,
+                                "sortType": sortType
+                            })
+                        ) }}"
+                    >
+                        Go Back
+                    </a>
+                {% endif %}
+
+                <select id="posts-per-page" data-category={{ sortType }} data-page={{ pagination.page }}>
+                    <option value=3 {{ postsPerPage == 3 ? 'selected' }} >3</option>
+                    <option value=5 {{ postsPerPage == 5 ? 'selected' }} >5</option>
+                    <option value=10 {{ postsPerPage == 10 ? 'selected' }} >10</option>
+                    <option value=20 {{ postsPerPage == 20 ? 'selected' }} >20</option>
+                </select>
+
+                {% if pagination.page < pagination.nbPages %}
+                    <a 
+                        class="btn btn-primary"
+                        href="{{ path(
+                            pagination.nomRoute,
+                            pagination.paramsRoute|merge({
+                                "postsPerPage": postsPerPage,
+                                'page': pagination.page+1,
+                                "postsPerPage": postsPerPage,
+                                "sortType": sortType
+                            })
+                        ) }}"
+                    >
+                        More posts
+                    </a>
+                {% endif %}
+            </div>
         {% endif %}
-</div>
+    {% endif %}
 </div>

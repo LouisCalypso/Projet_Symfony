@@ -73,7 +73,6 @@ class HomeController extends AbstractController
             'posts' => $posts,
             'pagination' => $pagination,
             'postsPerPage' => $postsPerPage
-
         ]);
     }
 

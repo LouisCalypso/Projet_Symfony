@@ -12,14 +12,11 @@
     </header>
 
     <!-- Content -->
-        {% if userLoggedIn.posts|length %}
-<div class="container">
-
+    {% if userLoggedIn.posts|length %}
+        <div class="container">
             <h2 >Posts</h2>
             <hr>
-</div>
-            {% set posts =  userLoggedIn.posts%}
-
-            {% include "post/posts-list.html.twig" %}
-        {% endif %}
+            {% include "post/posts-list.html.twig" with { posts: userLoggedIn.posts } %}
+        </div>
+    {% endif %}
 {% endblock %}
