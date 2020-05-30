@@ -15,21 +15,52 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Comment;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Class PostController
+ * Manage post and his comments
+ * Post and Comment display
+ * Post Creation an Deletion
+ * Comment Creation
+ *
+ * @package App\Controller
+ */
 class PostController extends AbstractController
 {
 
+    /**
+     * @var Security logged user details
+     */
     private $security;
+
+    /**
+     * @var PostRepository post db queries
+     */
     private $postRepository;
 
+    /**
+     * PostController constructor.
+     * @param Security $security
+     * @param PostRepository $postRepository
+     */
     public function __construct(Security $security, PostRepository $postRepository )
     {
         $this->security = $security;
         $this->postRepository = $postRepository;
     }
 
+
     /**
+     * function show
+     * Initiate post and get his comment
+     * Initiate comment form and create comments
+     * @param Post $post selected post
+     * @param Request $request
+     * @param MailerInterface $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      * @Route("/posts/{id}", name="post")
      */
+
     public function show(Post $post, Request $request, MailerInterface $mailer)
     {
 
@@ -37,46 +68,48 @@ class PostController extends AbstractController
 
         //TODO : COMMENT POST
         $commentForm = $this->createForm(CommentType::class);
-        // le formulaire prend la requête et va récupérer à lintérieur les champs
-        // remplis par le formulaire HTML
+
+        // the form takes the request
+        // and will retrieve the fields filled by the HTML form
         $commentForm->handleRequest($request);
 
-        // Si le formulaire a été soumis et est valide
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            // on récupère l'objet Comment créé par le formulaire
+            // We get the Comment object created by the form
             /** @var Comment $comment */
             $comment = $commentForm->getData();
 
-            // on associe le commentaire à l'article et on défini la date de création
+            // The comment is associated with the article and the creation date is defined
             $comment
                 ->setPost($post)
                 ->setUser($this->getUser())
                 ->setCreatedAt(new \DateTime());
 
-            // on recupère le l'EntityManager de Doctrine qui va nous servir à sauvegarder notre commentaire en base de données
+            // we get the EntityManager of Doctrine which will be used to save our comment in the database
             $manager = $this->getDoctrine()->getManager();
 
-            // le persist dit a Doctrine de conidérer cet Objet comme un objet à sauvegarder en base, l'objet est donc maintenant
-            // géré par Doctrine
+            // the persist says to Doctrine to consider this Object as an object to save in base
+            // the object is now managed by Doctrine
             $manager->persist($comment);
-            // le flush dit à Doctrine d'exécuter les requêtes SQL permettant de créer/modifier les objets sur lesquels
-            // on appelé ->persist()
+            //
+            // flush tells Doctrine to execute SQL queries to create / modify objects sur lesquels
+            // on which we called persist ()
             $manager->flush();
 
-            //S'il ne s'agit pas du propriétaire du poste qui commente son poste
+            // If it's not the post owner
+            //If it is not the owner of the post who comments on his post
             /*if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
-                // Mail de confirmation d'inscritpion
+                // New Comment mail
                $email = (new Email())
                     ->from('ig2i@symfodoggos.com')
                     ->to($post->getUser()->getEmail()) //->to('louis.duretete@gmail.com')
-                    ->subject("Quelqu'un a commenté votre poste : ".$post->getTitle()." !")
-                    ->html("<p>".$this->getUser()->getUsername()." a commenté votre poste : <b>".$post->getTitle()." </b>!</p>
-                                    <p>Vous pouvez voir ce qu'il/elle a dit avec ce lien : http://localhost:8080/posts/".$post->getId()."</p>");
+                    ->subject("Someone commented on your post : ".$post->getTitle()." !")
+                    ->html("<p>".$this->getUser()->getUsername()." commented on your post : <b>".$post->getTitle()." </b>!</p>
+                                    <p>You can see the comment here : http://localhost:8080/posts/".$post->getId()."</p>");
                 $mailer->send($email);
             }*/
 
-            // redirige vers la page actuelle (la redirection permet d'éviter qu'en actualisant la page, cela soumette
-            // à nouveau le formulaire
+            // redirect to the actual page
+            // redirection prevents the form from being returned
             return $this->redirectToRoute('post', ['id' => $post->getId()]);
         }
 
@@ -89,8 +122,20 @@ class PostController extends AbstractController
     }
 
     /**
+     * function createAction
+     * AJAX ACTION
+     * ajax function available in /public/js/script.js
+     *      =>  $(document).on('click','.modal-trigger',function ()
+     *
+     * Initiate Post Creation Form
+     * Create Post following user choice :
+     * Image, text or Link Post
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
      * @Route("/post/createAction", name="post/create")
      */
+
     public function createAction(Request $request)
     {
         $type = $request->query->get('type');
@@ -99,7 +144,7 @@ class PostController extends AbstractController
         $postForm = $this->createForm(PostType::class, null, ['type' => $type]);
         $postForm->handleRequest($request);
         if ($postForm->isSubmitted() && $postForm->isValid()) {
-            // on récupère l'objet Comment créé par le formulaire
+            // we get the object created by the form
             $post = $postForm->getData();
             $post
                 ->setNbVotes(0)
@@ -120,6 +165,14 @@ class PostController extends AbstractController
     }
 
     /**
+     * function deleteAction
+     * AJAX ACTION
+     * ajax function available in /public/js/script.js
+     *      =>  $(".delete-post").click(function ()
+     *
+     * delete the selected post
+     * @param Request $request
+     * @return Response
      * @Route("/posts/deleteAction/ajaxAction", name="post/delete")
      */
     public function deleteAction(Request $request){

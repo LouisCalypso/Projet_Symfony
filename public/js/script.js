@@ -1,5 +1,11 @@
 $(document).ready(function(){
 
+    /**
+     * triggered when clic on a vote button
+     * get post id
+     * call voteAction in HomeController
+     * success: update vote number
+     */
     $(document).on('click',".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled",function () {
         var self = $(this);
         var id = self.data("id");
@@ -40,10 +46,16 @@ $(document).ready(function(){
         })
     });
 
+    /**
+     * triggered when clic on Top or Newest button (sort buttons)
+     * get posts list diplay preferences
+     * call updateAction in HomeController
+     * success: render a new post-list
+     */
     //On écoute le clic sur les boutons newest et top
     $(document).on('click',".sort-trigger", function () {
         var self = $(this);
-        var postsPerPage = $('#articles-per-pages option:selected').val();
+        var postsPerPage = $('#posts-per-page option:selected').val();
         var type = self.data('category');
         var page = self.data('page');
         console.log(page);
@@ -67,9 +79,15 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('change',"#articles-per-pages",function(){
+    /**
+     * triggered when number posts per page preference is changed
+     * get posts list diplay preferences
+     * call updateAction in HomeController
+     * success: render a new post-list
+     */
+    $(document).on('change',"#posts-per-page",function(){
         var self = $(this);
-        var postsPerPage = $('#articles-per-pages option:selected').val();
+        var postsPerPage = $('#posts-per-page option:selected').val();
         var type = 'best-posts';
         var page =  self.data('page');
         $.ajax({
@@ -118,7 +136,9 @@ $(document).ready(function(){
         });
     });
 
-
+    /**
+     * buttons display management
+     */
     $(".btn-panel").hover(
         function() {  $(this).children(".btn-panel-collapse").collapse('show'); },
         function() { $(this).children(".btn-panel-collapse").collapse('hide'); }
@@ -131,6 +151,12 @@ $(document).ready(function(){
         function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); }
     );
 
+
+    /**
+     * Delete post
+     * get post id and call deleteAction in PostController
+     * success : remove selected post
+     */
     $(".delete-post").click(function () {
         var self = $(this);
         var id = self.data("id");

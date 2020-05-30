@@ -19,24 +19,33 @@ use Symfony\Component\Security\Core\Security;
  */
 class HomeController extends AbstractController
 {
-    
+    /**
+     * @var PostRepository post DB queries
+     */
     private $postRepository;
+    /**
+     * @var Security logged in user details
+     */
     private $security;
-    private $nbPostsPerPages;
-    
+
+    /**
+     * HomeController constructor.
+     * @param PostRepository $postRepository
+     * @param Security $security
+     */
     public function __construct(PostRepository $postRepository, Security $security)
     {
         $this->postRepository = $postRepository;
         $this->security = $security;
-        $this->nbPostsPerPages = 3;
     }
     
     /**
+     * function index
      * Initiate the posts list and render it following registered preferences
      *  (by default : 3 posts per page, page 1, sorted by best posts)
      * @param Request $request
-     * @param int $page
-     * @return Response
+     * @param int $page number of the actual page (default = 1)
+     * @return Response responde to the request
      * @Route("/", name="root")
      * @Route("/home/{page}", name="home", defaults={"page"=1})
      */
@@ -69,6 +78,7 @@ class HomeController extends AbstractController
     }
 
     /**
+     * function voteAction
      * AJAX Action
      * up or downvote a post from the posts-list
      * @param Request $request
@@ -121,6 +131,15 @@ class HomeController extends AbstractController
 
 
     /**
+     * function updatePostsList
+     * AJAX ACTION
+     * (ajax function available in /public/js/script.js
+     *      =>  $(document).on('change',"#posts-per-page",function()
+     *      =>  $(document).on('change',"#posts-per-page",function()
+     *
+     * Update posts list and render it following display preferences change
+     * sort by Top Posts or Newest Posts
+     * number of Posts per page change
      *
      * @param Request $request
      * @return Response
@@ -133,13 +152,6 @@ class HomeController extends AbstractController
         $postsPerPage = abs((int) $request->request->get('postsPerPage'));
         $type =   $request->request->get('type');
 
-        $this->nbPostsPerPages = $postsPerPage;
-        if($postsPerPage != null) {
-            $this->nbPostsPerPages = $postsPerPage;
-        } else {
-            $postsPerPage = $this->nbPostsPerPages;
-
-        }
         $posts = $this->postRepository->findAllPagineSorted($page, $postsPerPage, $type);
 
         $pagination = array(
