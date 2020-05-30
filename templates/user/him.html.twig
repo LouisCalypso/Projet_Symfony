@@ -15,12 +15,11 @@
     </header>
 
     <!-- Content -->
-        {% if userVisited.posts|length %}
-            <div class="container">
-                <h2 >Posts</h2>
-                <hr>
-            </div>
-            {% include "post/posts-list.html.twig" with { posts: userLoggedIn.posts } %}
-        {% endif %}
-    </div>
+    {% if userVisited.posts|length %}
+        <div class="container">
+            <h2 >Posts</h2>
+            <hr>
+            {% include "post/posts-list.html.twig" with { posts: userVisited.posts } %}
+        </div>
+    {% endif %}
 {% endblock %}
