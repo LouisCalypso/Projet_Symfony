@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    renderFigures();
+
     /**
      * triggered when clic on a vote button
      * get post id
@@ -74,6 +76,7 @@ $(document).ready(function(){
             success: function(data) {
                 console.log("SUCCESS");
                 $('.posts-list').html(data);
+                renderFigures();
             }
         })
 
@@ -105,6 +108,7 @@ $(document).ready(function(){
             success: function(data) {
                 console.log("SUCCESS");
                 $('.posts-list').html(data);
+                renderFigures();
             }
         })
     })
@@ -179,3 +183,19 @@ $(document).ready(function(){
     });
 
 });
+
+const renderFigures = () => {
+    $("figure img").each((k, e) => {
+        if ($(e).height() < $(e).width())
+            $(e).css({
+                height: "100%",
+                left: "50%",
+                transform: "translateX(-50%)",
+            });
+        else $(e).css({
+            width: "100%",
+            top: "50%",
+            transform: "translatey(-50%)",
+        });
+    });
+}

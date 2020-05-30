@@ -54,7 +54,9 @@
     <!-- CONTENT -->
     {% if post.getImage() %}
         <div class="d-flex flex-row align-items-middle">
-            <figure style="background-image: url('{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}');"></figure>
+            <figure>
+                <img src='{{ absolute_url(asset('storage/uploads/' ~post.getImage())) }}'>
+            </figure>
     {% endif %}
 
             <div class="card-body">
