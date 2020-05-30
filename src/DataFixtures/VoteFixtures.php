@@ -8,11 +8,21 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+/**
+ * Class VoteFixtures
+ * create fake votes for posts
+ * @package App\DataFixtures
+ */
 class VoteFixtures extends Fixture implements DependentFixtureInterface
 {
     public const POST = 'post';
     public const USER = 'user';
 
+    /**
+     * function load
+     * create fake votes
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create();
@@ -42,6 +52,10 @@ class VoteFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * function getDependencies
+     * @return array
+     */
     public function getDependencies()
     {
         return array(

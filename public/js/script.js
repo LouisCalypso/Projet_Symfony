@@ -1,7 +1,12 @@
 $(document).ready(function(){
 
-    $(".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled").click(function () {
-        console.log("clic");
+    /**
+     * triggered when clic on a vote button
+     * get post id
+     * call voteAction in HomeController
+     * success: update vote number
+     */
+    $(document).on('click',".up-vote, .down-vote,.up-vote-toggled,.down-vote-toggled",function () {
         var self = $(this);
         var id = self.data("id");
 
@@ -41,8 +46,74 @@ $(document).ready(function(){
         })
     });
 
+    /**
+     * triggered when clic on Top or Newest button (sort buttons)
+     * get posts list diplay preferences
+     * call updateAction in HomeController
+     * success: render a new post-list
+     */
+    //On écoute le clic sur les boutons newest et top
+    $(document).on('click',".sort-trigger", function () {
+        var self = $(this);
+        var postsPerPage = $('#posts-per-page option:selected').val();
+        var type = self.data('category');
+        var page = self.data('page');
+        console.log(page);
+        console.log('posts', postsPerPage, page);
+
+        $.ajax({
+            type: "POST",
+            url: '/home/updateAction/ajaxAction',
+            dataType: "json",
+            data: {
+                "postsPerPage": postsPerPage,
+                "type": type,
+                "page": page
+            },
+            async: true,
+            success: function(data) {
+                console.log("SUCCESS");
+                $('.posts-list').html(data);
+            }
+        })
+
+    });
+
+    /**
+     * triggered when number posts per page preference is changed
+     * get posts list diplay preferences
+     * call updateAction in HomeController
+     * success: render a new post-list
+     */
+    $(document).on('change',"#posts-per-page",function(){
+        var self = $(this);
+        var postsPerPage = $('#posts-per-page option:selected').val();
+        var type = self.data('category');
+        var page =  self.data('page');
+        $.ajax({
+            type: "POST",
+            url: '/home/updateAction/ajaxAction',
+            dataType: "json",
+            data: {
+                "postsPerPage": parseInt(postsPerPage),
+                "type": type,
+                "page": parseInt(page)
+
+
+            },
+            async: true,
+            success: function(data) {
+                console.log("SUCCESS");
+                $('.posts-list').html(data);
+            }
+        })
+    })
+
+
+
+
     //On écoute le "click" sur le bouton ayant la classe "modal-trigger"
-    $('.modal-trigger').click(function () {
+    $(document).on('click','.modal-trigger',function () {
         //On récupère l'url depuis la propriété "Data-target" de la balise html a
         url = $(this).attr('data-target');
 
@@ -50,9 +121,9 @@ $(document).ready(function(){
         $(".modal").modal();
         $('.modal-content').html(
             '<div class="w-100 text-center">'
-                + '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">'
-                    + '<span class="sr-only">Loading...</span>'
-                + '</div>'
+            + '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">'
+            + '<span class="sr-only">Loading...</span>'
+            + '</div>'
             + '</div>'
         );
 
@@ -65,6 +136,9 @@ $(document).ready(function(){
         });
     });
 
+    /**
+     * buttons display management
+     */
     $(".btn-panel").hover(
         function() {  $(this).children(".btn-panel-collapse").collapse('show'); },
         function() { $(this).children(".btn-panel-collapse").collapse('hide'); }
@@ -77,6 +151,12 @@ $(document).ready(function(){
         function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); }
     );
 
+
+    /**
+     * Delete post
+     * get post id and call deleteAction in PostController
+     * success : remove selected post
+     */
     $(".delete-post").click(function () {
         var self = $(this);
         var id = self.data("id");

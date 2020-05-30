@@ -8,18 +8,36 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Class SecurityController
+ * Control user login
+ * @package App\Controller
+ */
 class SecurityController extends AbstractController
 {
+
+    /**
+     * @var Security
+     */
     private $security;
 
+    /**
+     * SecurityController constructor.
+     * @param Security $security
+     */
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
 
     /**
+     * function login
+     * initiate  and render login form
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
      * @Route("/login", name="app_login")
      */
+
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
@@ -40,6 +58,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * function logout
+     * log out the user
      * @Route("/logout", name="app_logout")
      */
     public function logout()

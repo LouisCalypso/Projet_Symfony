@@ -67,7 +67,7 @@
 
                 {% if post.body %}
                     <div class="blockquote text-truncate" style="max-height: 10vh;">
-                        {{ post.body }}
+                        {{ post.body|raw}}
                     </div>
                 {% endif %}
 
@@ -84,4 +84,4 @@
             </div>
 
     {{ post.getImage() ? "</div>" }}
-</div>
+        </div>
