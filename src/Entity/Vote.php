@@ -5,8 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Class Vote
+ * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  */
+
+
 class Vote
 {
     /**

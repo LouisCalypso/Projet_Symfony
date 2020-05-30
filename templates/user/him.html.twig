@@ -15,15 +15,13 @@
     </header>
 
     <!-- Content -->
-    <div class="container">
         {% if userVisited.posts|length %}
-            <h2 class="">Posts</h2>
-            <hr>
-            <div class="mx-4">
-                {% for post in userVisited.posts %}
-                    {% include "post/post.html.twig" %}
-                {% endfor %}
+            {% set posts =  userVisited.posts%}
+            <div class="container">
+                <h2 >Posts</h2>
+                <hr>
             </div>
+            {% include "post/posts-list.html.twig" %}
         {% endif %}
     </div>
 {% endblock %}

@@ -1,0 +1,87 @@
+<div class="post card mb-4">
+
+    <!-- HEAD -->
+    <div class="card-header d-flex flex-row clearfix">
+        <div>
+        <!-- VOTE SYSTEM -->
+        {% if userLoggedIn %}
+            {% set upvotePossible = 1 %}
+            {% set downvotePossible = 1 %}
+            {% for vote in post.votes %}
+                {% if vote.getUser().id == userLoggedIn.id %}
+                    {% if vote.type %}
+                        {% set upvotePossible = 0 %}
+                    {% else %}
+                        {% set downvotePossible = 0 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if upvotePossible %}
+                <img class="up-vote d-inline" src="{{ absolute_url(asset('img/up-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% else %}
+                <img class="up-vote-toggled d-inline" src="{{ absolute_url(asset('img/up-arrow-orange.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% endif %}
+            <h4 class="nb-vote d-inline" style="color:red;" data-id="{{ post.getId() }}">{{ post.getNbVotes() }}</h4>
+            {% if downvotePossible %}
+                <img class="down-vote d-inline" src="{{ absolute_url(asset('img/down-arrow.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% else %}
+                <img class="down-vote-toggled d-inline" src="{{ absolute_url(asset('img/down-arrow-blue.png')) }}" style="width:25px;" data-id="{{ post.getId() }}"/>
+            {% endif %}
+        {% else %}
+            <h4 class="d-inline" style="color:red;">{{ post.getNbVotes() }}</h4>
+        {% endif %}
+        </div>
+        <!-- END VOTE SYSTEM -->
+        <div class="lead post-meta ml-auto">
+            Posted 
+            {% if routeName not in "users profile" %}
+                    by
+                {% if userLoggedIn != post.user %}
+                    <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
+                {% else %}
+                    you
+                {% endif %}
+            {% endif %}
+            on {{ post.getCreatedAt()|date('d/m/Y \\a\\t H:i') }}
+            {% if routeName == "profile" %}
+                <a class="close delete-post ml-3" data-toggle="tooltip" data-placement="top" title="Delete ?" data-id="{{ post.getId() }}">
+                    <img src="{{ absolute_url(asset('img/trash.svg')) }}" width="25" />
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    {% if post.getImage() %}
+        <div class="d-flex flex-row align-items-middle">
+            <figure style="background-image: url('{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}');"></figure>
+    {% endif %}
+
+            <div class="card-body">
+
+                <div class="card-title h-100 {{ not post.getImage() ? 'text-center' }}">
+                    <a class="display-4" href="{{ url('post',{'id': post.id}) }}">
+                        {{ post.getTitle() }}
+                    </a>
+                </div>
+
+                {% if post.body %}
+                    <div class="blockquote text-truncate" style="max-height: 10vh;">
+                        {{ post.body|raw}}
+                    </div>
+                {% endif %}
+
+                {% if post.link %}
+                    <div class="text-center" >
+                        <a 
+                            class="card-link btn btn-dark shadow-sm px-5 py-3 font-weight-bold" 
+                            href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
+                        >
+                            {{ post.link }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+    {{ post.getImage() ? "</div>" }}
+        </div>

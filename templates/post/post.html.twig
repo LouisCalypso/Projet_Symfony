@@ -1,12 +1,7 @@
 <div class="post border border-white" >
-    {% if routeName == "profile" %}
-        <a class="close delete-post m-2" data-toggle="tooltip" data-placement="left" title="Delete ?" data-id="{{ post.getId() }}">
-            <img src="{{ absolute_url(asset('img/trash.svg')) }}" width="25" />
-        </a>
-    {% endif %}
 
     <!-- HEAD -->
-    <div class="{{ routeName in "home search" ? "card" }} mb-4">
+    <div class="mb-4">
         <div class="card-body text-center">
             <!-- VOTE SYSTEM -->
             <h4 style="color:red;">
@@ -44,82 +39,75 @@
                 </a>
             </h2>
             <div class="lead post-meta">
-                Posted 
-                {% if routeName not in "users profile" %}
-                        by
+                Posted by
                     {% if userLoggedIn != post.user %}
                         <a class="font-weight-bold" href="{{ url('users', {'id': post.user.id }) }}">{{ post.user.username }}</a>
                     {% else %}
                         you
                     {% endif %}
-                {% endif %}
                 on {{ post.getCreatedAt()|date('d/m/Y \\a\\t H:i') }}
             </div>
         </div>
     </div>
 
-    {% if routeName not in "home search" %}
-        <!-- CONTENT -->
-        <div class="d-flex flex-column align-items-center mb-4">
+    <!-- CONTENT -->
+    <div class="d-flex flex-column align-items-center mb-4">
 
-            {% if post.getImage() %}
-                <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="w-50 rounded mb-4" alt="Post image" width="200">
-            {% endif %}
+        {% if post.getImage() %}
+            <img src = "{{absolute_url(asset('storage/uploads/' ~post.getImage() )) }}" class="w-50 rounded mb-4" alt="Post image" width="200">
+        {% endif %}
 
-            {% if post.body %}
-                <div class="bg-light rounded blockquote p-4 w-100 shadow-sm mb-4">
-                    {{ post.body }}
-                </div>
-            {% endif %}
-
-            {% if post.link %}
-                <a 
-                    class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold mb-4" 
-                    href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
-                >
-                    {{ post.link }}
-                </a>
-            {% endif %}
-        </div>
-
-        <!-- COMMENTS -->
-        {% if routeName != "profile" %}
-            <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
-                        <li class="list-group-item">
-                            <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
-                            - {{ comment.createdAt|date("d/m/Y \\a\\t H:i") }}
-                            <p> {{ comment.body|raw }} </p>
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <!-- COMMENT SYSTEM -->
-                {% if routeName == "post" and userLoggedIn %}
-                    <div class="card-footer d-none comment-sys">
-                        {% if userLoggedIn %}
-                            <!-- COMMENT FORM -->
-                            {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
-                            {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
-                            <div class="d-flex flex-row justify-content-center">
-                                {{ form_widget(commentForm.body) }}
-                                <button type="submit" class="btn btn-secondary ml-3">Submit</button>
-                            </div>
-                            {{ form_end(commentForm) }}
-                            <!-- END COMMENT FORM -->
-                        {% endif %}
-                    </div>
-                    <input
-                        type="button"
-                        class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
-                        value="Add a comment"
-                        onClick="$('.comment-sys').toggleClass('d-none')"
-                    >
-                {% endif %}
+        {% if post.body %}
+            <div class="bg-light rounded blockquote p-4 w-100 shadow-sm mb-4">
+                <p> {{ post.body|raw }} </p>
             </div>
         {% endif %}
-    {% endif %}
+
+        {% if post.link %}
+            <a 
+                class="btn btn-dark shadow-sm px-5 py-3 font-weight-bold mb-4" 
+                href="{{ "http://" in post.link or "https://" in post.link ? post.link : "https://" ~ post.link }}"
+            >
+                {{ post.link }}
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- COMMENTS -->
+    <h4 class="mx-4">{{ post.getComments()|length }} Comment{% if post.getComments()|length > 1 %}s{% endif %}</h4>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            {% for comment in post.comments|sort((a, b) => a.createdAt <=> b.createdAt)|reverse %}
+                <li class="list-group-item">
+                    <a class="font-weight-bold" href="{{ url('users', {'id': comment.user.id }) }}">{{ comment.user.username }}</a>
+                    - {{ comment.createdAt|date("d/m/Y \\a\\t H:i") }}
+                    <p> {{ comment.body|raw }} </p>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- COMMENT SYSTEM -->
+        {% if userLoggedIn %}
+            <div class="card-footer d-none comment-sys">
+                {% if userLoggedIn %}
+                    <!-- COMMENT FORM -->
+                    {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
+                    {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
+                    <div class="d-flex flex-row justify-content-center">
+                        {{ form_widget(commentForm.body) }}
+                        <button type="submit" class="btn btn-secondary ml-3">Submit</button>
+                    </div>
+                    {{ form_end(commentForm) }}
+                    <!-- END COMMENT FORM -->
+                {% endif %}
+            </div>
+            <input
+                type="button"
+                class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
+                value="Add a comment"
+                onClick="$('.comment-sys').toggleClass('d-none')"
+            >
+        {% endif %}
+    </div>
 
 </div>

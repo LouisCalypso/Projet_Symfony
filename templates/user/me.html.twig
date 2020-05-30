@@ -12,15 +12,14 @@
     </header>
 
     <!-- Content -->
-    <div class="container">
         {% if userLoggedIn.posts|length %}
-            <h2 class="">Posts</h2>
+<div class="container">
+
+            <h2 >Posts</h2>
             <hr>
-            <div class="mx-4">
-                {% for post in userLoggedIn.posts %}
-                    {% include "post/post.html.twig" %}
-                {% endfor %}
-            </div>
+</div>
+            {% set posts =  userLoggedIn.posts%}
+
+            {% include "post/posts-list.html.twig" %}
         {% endif %}
-    </div>
 {% endblock %}
