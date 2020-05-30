@@ -16,12 +16,11 @@
 
     <!-- Content -->
         {% if userVisited.posts|length %}
-            {% set posts =  userVisited.posts%}
             <div class="container">
                 <h2 >Posts</h2>
                 <hr>
             </div>
-            {% include "post/posts-list.html.twig" %}
+            {% include "post/posts-list.html.twig" with { posts: userLoggedIn.posts } %}
         {% endif %}
     </div>
 {% endblock %}

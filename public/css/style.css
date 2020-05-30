@@ -12,9 +12,13 @@ a:hover {
 
 figure {
     display: block;
+    position: relative;
     width: 40%;
-    height: 40vh;
-    background-position: center;
-    background-size: cover;
+    height: 35vh;
+    overflow: hidden;
     margin:0;
+}
+
+figure img {
+    position: absolute;
 }

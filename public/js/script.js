@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    renderFigures();
+
     /**
      * triggered when clic on a vote button
      * get post id
@@ -61,6 +63,8 @@ $(document).ready(function(){
         console.log(page);
         console.log('posts', postsPerPage, page);
 
+        self.children(".content").replaceWith(getSpinner("primary"));
+
         $.ajax({
             type: "POST",
             url: '/home/updateAction/ajaxAction',
@@ -73,7 +77,8 @@ $(document).ready(function(){
             async: true,
             success: function(data) {
                 console.log("SUCCESS");
-                $('.posts-list').html(data);
+                $('.posts-list').replaceWith(data);
+                renderFigures();
             }
         })
 
@@ -90,6 +95,7 @@ $(document).ready(function(){
         var postsPerPage = $('#posts-per-page option:selected').val();
         var type = self.data('category');
         var page =  self.data('page');
+
         $.ajax({
             type: "POST",
             url: '/home/updateAction/ajaxAction',
@@ -98,13 +104,12 @@ $(document).ready(function(){
                 "postsPerPage": parseInt(postsPerPage),
                 "type": type,
                 "page": parseInt(page)
-
-
             },
             async: true,
             success: function(data) {
                 console.log("SUCCESS");
-                $('.posts-list').html(data);
+                $('.posts-list').replaceWith(data);
+                renderFigures();
             }
         })
     })
@@ -119,13 +124,7 @@ $(document).ready(function(){
 
         //On initialise les modales materialize
         $(".modal").modal();
-        $('.modal-content').html(
-            '<div class="w-100 text-center">'
-            + '<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">'
-            + '<span class="sr-only">Loading...</span>'
-            + '</div>'
-            + '</div>'
-        );
+        $('.modal-content').html(getSpinner("primary"));
 
         //on fait un appel ajax vers l'action symfony qui nous renvoie la vue
         $.get(url, function (data) {
@@ -140,13 +139,13 @@ $(document).ready(function(){
      * buttons display management
      */
     $(".btn-panel").hover(
-        function() {  $(this).children(".btn-panel-collapse").collapse('show'); },
+        function() { $(this).children(".btn-panel-collapse").collapse('show'); },
         function() { $(this).children(".btn-panel-collapse").collapse('hide'); }
     );
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="tooltip"]').parents('.post').css("transition","ease .5s");
-    $('[data-toggle="tooltip"]').hover(
+    $('.delete-post').parents('.post').css("transition","ease .5s");
+    $('.delete-post').hover(
         function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); },
         function() {  $(this).parents('.post').toggleClass(['border-danger', 'shadow']); }
     );
@@ -179,3 +178,29 @@ $(document).ready(function(){
     });
 
 });
+
+const renderFigures = () => {
+    $("figure img").each((k, e) => {
+        if ($(e).height() < $(e).width())
+            $(e).css({
+                height: "100%",
+                left: "50%",
+                transform: "translateX(-50%)",
+            });
+        else $(e).css({
+            width: "100%",
+            top: "50%",
+            transform: "translatey(-50%)",
+        });
+    });
+}
+
+const getSpinner = color => {
+    return $('<div>').addClass(["w-100", "text-center"]).html(
+        $('<div>')
+            .addClass(["spinner-border", "text-" + color])
+            .css({width: "3erm", height: "3erm"})
+            .attr("role","status")
+            .html($("<span>").addClass("sr-only").text("Loading..."))
+    );
+}
