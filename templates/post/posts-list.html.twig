@@ -17,7 +17,7 @@
             {% if pagination.page > 1 %}
                 <a class="clearfix btn btn-primary float-left"  href="{{ path(pagination.nomRoute,
                     pagination.paramsRoute|merge({'page': pagination.page-1,  "postsPerPage": postsPerPage, "sortType": sortType})) }}">
-                    Newer posts
+                    Go Back
                 </a>
             {% endif %}
 

@@ -11,12 +11,21 @@ use Faker;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\DataFixtures\UserFixtures;
 
+/**
+ * Class PostFixtures
+ * create fake posts
+ * @package App\DataFixtures
+ */
 class PostFixtures extends Fixture implements DependentFixtureInterface
 {
     public const POST = 'post';
     public const USER = 'user';
 
-
+    /**
+     * function load
+     * load and create fake posts
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create();
@@ -70,6 +79,10 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * function getDependencies
+     * @return array
+     */
     public function getDependencies()
     {
         return array(

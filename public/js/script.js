@@ -88,7 +88,7 @@ $(document).ready(function(){
     $(document).on('change',"#posts-per-page",function(){
         var self = $(this);
         var postsPerPage = $('#posts-per-page option:selected').val();
-        var type = 'best-posts';
+        var type = self.data('category');
         var page =  self.data('page');
         $.ajax({
             type: "POST",

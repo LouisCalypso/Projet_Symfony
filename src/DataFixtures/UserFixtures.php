@@ -9,17 +9,34 @@ use Faker;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class UserFixtures
+ * create fake users
+ * @package App\DataFixtures
+ */
 class UserFixtures extends Fixture
 {
     public const USER = 'user';
 
+    /**
+     * @var UserPasswordEncoderInterface encode fake password
+     */
     private $encoder;
 
+    /**
+     * UserFixtures constructor.
+     * @param UserPasswordEncoderInterface $encoder
+     */
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
+    /**
+     * function load
+     * create fake users
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create();

@@ -11,11 +11,21 @@ use App\DataFixtures\UserFixtures;
 use App\DataFixtures\PostFixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+/**
+ * Class CommentFixtures
+ * create fake comments
+ * @package App\DataFixtures
+ */
 class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
     public const POST = 'post';
     public const USER = 'user';
 
+    /**
+     * function load
+     * create and load fake comments
+     * @param ObjectManager $manager
+     */
     public function load(ObjectManager $manager)
     {
         $faker = Faker\Factory::create();
@@ -39,6 +49,10 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * function get dependencies
+     * @return array
+     */
     public function getDependencies()
     {
         return array(

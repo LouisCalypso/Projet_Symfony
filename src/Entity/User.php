@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * Class User
+ * @package App\Entity
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(
  * fields={"email"},
@@ -22,6 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * message="This username already exists."
  *)
  */
+
 class User implements UserInterface
 {
     /**
@@ -78,6 +81,9 @@ class User implements UserInterface
      */
     private $votes;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->userComments = new ArrayCollection();
@@ -85,16 +91,26 @@ class User implements UserInterface
         $this->votes = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -124,6 +140,10 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -139,6 +159,10 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return $this
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -171,6 +195,10 @@ class User implements UserInterface
         return $this->userComments;
     }
 
+    /**
+     * @param Comment $userComment
+     * @return $this
+     */
     public function addUserComment(Comment $userComment): self
     {
         if (!$this->userComments->contains($userComment)) {
@@ -181,6 +209,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param Comment $userComment
+     * @return $this
+     */
     public function removeUserComment(Comment $userComment): self
     {
         if ($this->userComments->contains($userComment)) {
@@ -202,6 +234,10 @@ class User implements UserInterface
         return $this->posts;
     }
 
+    /**
+     * @param Post $post
+     * @return $this
+     */
     public function addPost(Post $post): self
     {
         if (!$this->posts->contains($post)) {
@@ -212,6 +248,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param Post $post
+     * @return $this
+     */
     public function removePost(Post $post): self
     {
         if ($this->posts->contains($post)) {
@@ -225,6 +265,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param string $username
+     * @return $this
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -232,11 +276,18 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param \DateTimeInterface $createdAt
+     * @return $this
+     */
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -252,6 +303,10 @@ class User implements UserInterface
         return $this->votes;
     }
 
+    /**
+     * @param Vote $vote
+     * @return $this
+     */
     public function addVote(Vote $vote): self
     {
         if (!$this->votes->contains($vote)) {
@@ -262,6 +317,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param Vote $vote
+     * @return $this
+     */
     public function removeVote(Vote $vote): self
     {
         if ($this->votes->contains($vote)) {

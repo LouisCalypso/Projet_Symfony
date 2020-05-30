@@ -9,8 +9,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
+/**
+ * Class PostType
+ * @package App\Form
+ */
 class PostType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', null, ['label' => 'Title']);
@@ -24,6 +32,9 @@ class PostType extends AbstractType
             $builder->add('imageFile', VichImageType::class, ['label' => 'Image']);
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

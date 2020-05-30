@@ -8,18 +8,26 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
+ * Class PostRepository
+ * @package App\Repository
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
  * @method Post|null findOneBy(array $criteria, array $orderBy = null)
  * @method Post[]    findAll()
  * @method Post[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
+
 class PostRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Post::class);
     }
-    
+
+    /**
+     * Find the last post uploaded
+     * @param $count int number of items epr page
+     * @return mixed
+     */
     public function findLast($count) {
         $qb = $this
             ->createQueryBuilder('post')
@@ -31,7 +39,13 @@ class PostRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
-    
+
+    /**
+     * Find all posts and pagine them following count
+     * @param $page int page we are looking for
+     * @param $count int number of items epr page
+     * @return Paginator
+     */
     public function findAllPagine($page, $count) {
         $qb = $this->createQueryBuilder('post')
                 ->add('orderBy', 'post.nbVotes DESC, post.createdAt DESC');
@@ -46,10 +60,11 @@ class PostRepository extends ServiceEntityRepository
     }
 
     /**
+     * Find all the posts, sort them and pagin them
      * @desc Order posts by date or by vote, using pagination
-     * @param $page
-     * @param $count
-     * @param $type
+     * @param $page int page we are looking for
+     * @param $count int number of items epr page
+     * @param $type string category after which we sort
      * @return Paginator
      */
     public function findAllPagineSorted($page, $count, $type) {
@@ -72,6 +87,12 @@ class PostRepository extends ServiceEntityRepository
         return $paginator;
     }
 
+    /**
+     * Find a specific post
+     * @param $value int post id
+     * @return Post|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneById($value): ?Post
     {
         return $this->createQueryBuilder('post')
