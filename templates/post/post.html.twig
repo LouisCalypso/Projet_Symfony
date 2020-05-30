@@ -88,19 +88,18 @@
 
         <!-- COMMENT SYSTEM -->
         {% if userLoggedIn %}
-            <div class="card-footer d-none comment-sys">
-                {% if userLoggedIn %}
+            {% if userLoggedIn %}
+                <div class="card-footer d-none comment-sys p-0">
                     <!-- COMMENT FORM -->
-                    {% form_theme commentForm 'bootstrap_4_horizontal_layout.html.twig' %}
                     {{ form_start(commentForm, {attr: {'novalidate': 'novalidate'}}) }}
-                    <div class="d-flex flex-row justify-content-center">
+                    <div>
+                        <button type="submit" class="float-right btn btn-secondary px-3 py-2 rounded-0">Send</button>
                         {{ form_widget(commentForm.body) }}
-                        <button type="submit" class="btn btn-secondary ml-3">Submit</button>
                     </div>
                     {{ form_end(commentForm) }}
                     <!-- END COMMENT FORM -->
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             <input
                 type="button"
                 class="card-footer btn bg-primary text-white text-center font-weight-bolder comment-sys"
