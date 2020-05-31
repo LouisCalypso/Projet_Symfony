@@ -1,6 +1,6 @@
-#Français :
+# Français :
 
-##Pour récupérer le projet en local : 
+## Pour récupérer le projet en local : 
 Après un git clone en local sur votre PC (il faut récupérer le lien, exemple : git clone https://github.com/LouisCalypso/Projet_Symfony.git) 
 Puis go sur la branche dev puis pull le code de github :
 ```
@@ -31,10 +31,9 @@ Lancer le projet :
 php -S localhost:8080 -t public
 ```
 
-#English :
+# English :
 
-
-##To recover the project locally:
+## To recover the project locally:
 After a git clone locally on your PC (you must recover the link, example: git clone https://github.com/LouisCalypso/Projet_Symfony.git)
 Then go to the dev branch then pull the github code:
 ```
