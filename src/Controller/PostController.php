@@ -97,7 +97,7 @@ class PostController extends AbstractController
 
             // If it's not the post owner
             //If it is not the owner of the post who comments on his post
-            /*if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
+            if($post->getUser()->getEmail() != $this->getUser()->getEmail()){
                 // New Comment mail
                $email = (new Email())
                     ->from('ig2i@symfodoggos.com')
@@ -106,7 +106,7 @@ class PostController extends AbstractController
                     ->html("<p>".$this->getUser()->getUsername()." commented on your post : <b>".$post->getTitle()." </b>!</p>
                                     <p>You can see the comment here : http://localhost:8080/posts/".$post->getId()."</p>");
                 $mailer->send($email);
-            }*/
+            }
 
             // redirect to the actual page
             // redirection prevents the form from being returned

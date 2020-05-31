@@ -72,13 +72,13 @@ class RegisterController extends AbstractController
             $manager->flush();
 
             // Registration confirmation email
-            /*$email = (new Email())
+            $email = (new Email())
                 ->from('inscription@symfodoggos.com')
                 ->to($userFormType->getData()->getEmail()) //->to('louis.duretete@gmail.com')
                 ->subject('Welcome to SymfoDoggos !')
                 ->html("<p>You are now registered on symfodoggos.com !</p><p>http://localhost:8080/</p> <h4>Who let the dogs out ?</h4>");
 
-            $mailer->send($email);*/
+            $mailer->send($email);
 
             return $this->redirectToRoute('app_login');
         }
